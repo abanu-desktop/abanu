@@ -33,12 +33,46 @@ namespace PanelShell
 	{
 
 		private Box box;
-		//private Dictionary<Button, TWindow> buthash=new Dictionary<Button, TWindow>();
+		private Dictionary<TWindow, ToggleButton2> buthash2 = new Dictionary<TWindow, ToggleButton2>();
+
+		public ToggleButton2 GetButton(TWindow wnd)
+		{
+			ToggleButton2 bt = null;
+			buthash2.TryGetValue(wnd, out bt);
+			return bt;
+		}
 
 		public TasksPlugin()
 		{
 			widget = box = new Box(Orientation.Horizontal, 0);
 			Update();
+
+			ShellManager.Current.WindowActivated += (wnd) => {
+				
+
+				var bt = GetButton(wnd);
+				if (bt != null) {
+					AppLib.log("act");
+					Application.Invoke((s, e) => {
+						foreach (var b in buthash2.Values) {
+							b.Active = bt == b;
+						}
+					});
+					//bt.Toggle();
+				}
+			};
+			ShellManager.Current.WindowDestroyed += (wnd) => {
+				var bt = GetButton(wnd);
+				if (bt != null) {
+					buthash2.Remove(wnd);
+					box.Remove(bt);
+					bt.Dispose();
+				}
+			};
+			ShellManager.Current.WindowCreated += (wnd) => {
+				if (wnd.ShowInTaskbar())
+					createButton(wnd);
+			};
 		}
 
 		public void Update()
@@ -56,13 +90,36 @@ namespace PanelShell
 
 		}
 
+		public class ToggleButton2 : ToggleButton
+		{
+
+			public TWindow wnd;
+
+			public ToggleButton2(TWindow wnd)
+			{
+				this.wnd = wnd;
+				Events = EventMask.AllEventsMask;
+			}
+
+			protected override bool OnButtonPressEvent(EventButton evnt)
+			{
+				if (Active)
+					wnd.Minimize();
+				else
+					wnd.BringToFront();
+				return false;
+			}
+
+		}
+
 		private void createButton(TWindow wnd)
 		{
+			AppLib.log(wnd.hwnd.ToString());
 
 			var b = new HBox();
 			b.Events = EventMask.AllEventsMask;
 
-			var but = new Button();
+			var but = new ToggleButton2(wnd);
 			but.Add(b);
 			box.Add(but);
 
@@ -88,8 +145,10 @@ namespace PanelShell
 
 			b.ShowAll();
 
+			buthash2.Add(wnd, but);
+
 			but.Clicked += (s, e) => {
-				wnd.BringToFront();
+				//wnd.BringToFront();
 			};
 
 		}

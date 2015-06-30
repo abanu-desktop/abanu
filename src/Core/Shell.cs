@@ -27,6 +27,28 @@ namespace PanelShell
 		{
 		}
 
+		public event Action<TWindow> WindowActivated;
+		public event Action<TWindow> WindowCreated;
+		public event Action<TWindow> WindowDestroyed;
+
+		public void RaiseWindowActivated(TWindow wnd)
+		{
+			if (WindowActivated != null)
+				WindowActivated(wnd);
+		}
+
+		public void RaiseWindowCreated(TWindow wnd)
+		{
+			if (WindowCreated != null)
+				WindowCreated(wnd);
+		}
+
+		public void RaiseWindowDestroyed(TWindow wnd)
+		{
+			if (WindowDestroyed != null)
+				WindowDestroyed(wnd);
+		}
+
 	}
 
 	public class ShellManagerUnix : ShellManager
@@ -75,13 +97,20 @@ namespace PanelShell
 					// Receive shell messages
 					switch ((Interop.ShellEvents)m.WParam.ToInt32()) {
 						case Interop.ShellEvents.HSHELL_WINDOWCREATED:
+							ShellManager.Current.RaiseWindowCreated(ShellManager.Current.Windows.GetOrCreate(m.LParam));
+							break;
 						case Interop.ShellEvents.HSHELL_WINDOWDESTROYED:
+							ShellManager.Current.RaiseWindowDestroyed(ShellManager.Current.Windows.GetOrCreate(m.LParam));
+							break;
 						case Interop.ShellEvents.HSHELL_WINDOWACTIVATED:
-							var wnd = new TWindowWin32(m.LParam);
+							ShellManager.Current.RaiseWindowActivated(ShellManager.Current.Windows.GetOrCreate(m.LParam));
+							break;
+
+					/*var wnd = new TWindowWin32(m.LParam);
 							string wName = wnd.GetName();
 							var action = (Interop.ShellEvents)m.WParam.ToInt32();
 							OnWindowEvent(string.Format("{0} - {1}: {2}", action, m.LParam, wName));
-							break;
+							break;*/
 					}
 				}
 				base.WndProc(ref m);
@@ -100,12 +129,10 @@ namespace PanelShell
 		public override void UpdateWindows()
 		{
 			Interop.EnumWindows((hwnd, lParam) => {
-				var wnd = new TWindowWin32(hwnd);
-				Windows.Add(wnd);
+				TWindowWin32 wnd = (TWindowWin32)ShellManager.Current.Windows.GetOrCreate(hwnd);
 
 				if (wnd.IsAltTabWindow())
 					wnd.Log();
-
 
 				return true;
 			}, IntPtr.Zero);
@@ -115,7 +142,22 @@ namespace PanelShell
 
 	public class TWindowList : List<TWindow>
 	{
+		public TWindow GetOrCreate(IntPtr hwnd)
+		{
+			foreach (var wnd in this) {
+				if (wnd.hwnd.Equals(hwnd))
+					return wnd;
+			}
 
+			TWindow w;
+			if (Environment.OSVersion.Platform == PlatformID.Unix)
+				w = null;
+			else
+				w = new TWindowWin32(hwnd);
+			Add(w);
+
+			return w;
+		}
 	}
 
 	public class TWindow
@@ -130,6 +172,10 @@ namespace PanelShell
 		{
 		}
 
+		public virtual void Minimize()
+		{
+		}
+
 		public virtual bool ShowInTaskbar()
 		{
 			return true;
@@ -140,11 +186,17 @@ namespace PanelShell
 			return null;
 		}
 
+		public IntPtr hwnd;
+
 	}
 
 	public class TWindowWin32 : TWindow
 	{
-		public IntPtr hwnd;
+
+		public override void Minimize()
+		{
+			Interop.ShowWindow(hwnd, Interop.SW_MINIMIZE);	
+		}
 
 		public TWindowWin32(IntPtr hwnd)
 		{
@@ -158,7 +210,12 @@ namespace PanelShell
 
 		public override void BringToFront()
 		{
-			Interop.BringWindowToTop(hwnd);
+			AppLib.log("BringToFront");
+			//Interop.BringWindowToTop(hwnd);
+			Interop.ShowWindow(hwnd, Interop.SW_SHOW);	
+			if (Interop.IsIconic(hwnd))
+				Interop.ShowWindow(hwnd, Interop.SW_RESTORE);	
+			Interop.SetForegroundWindow(hwnd);
 		}
 
 		public override string GetName()
