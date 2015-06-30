@@ -10,7 +10,7 @@ namespace PanelShell
 	{
 		
 		public PanelWindow()
-			: base(global::Gtk.WindowType.Popup)
+			: base(Gtk.WindowType.Popup)
 		{
 			Decorated = false;
 		}

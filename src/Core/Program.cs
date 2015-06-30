@@ -14,6 +14,12 @@ namespace PanelShell
 			//var dwin = new DesktopWindow();
 			//dwin.Show();
 
+			var logwin = new LogWindow();
+			logwin.Show();
+			AppLib.log("log started");
+
+			var shellMan = ShellManager.Create();
+
 			var pwin = new TPanel();
 			pwin.Setup();
 			pwin.Show();

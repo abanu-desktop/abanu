@@ -37,6 +37,7 @@
     <Reference Include="pango-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="atk-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="gio-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -51,6 +52,10 @@
     <Compile Include="Native.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="Plugin.cs" />
+    <Compile Include="Hooks.cs" />
+    <Compile Include="Shell.cs" />
+    <Compile Include="lib.cs" />
+    <Compile Include="LogWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

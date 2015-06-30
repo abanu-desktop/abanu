@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PanelShell", "Core\PanelShell.csproj", "{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell", "Core\SharpShell.csproj", "{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
