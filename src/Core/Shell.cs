@@ -235,6 +235,8 @@ namespace PanelShell
 
 		public bool  IsAltTabWindow()
 		{
+			var name = GetName();
+
 			Interop.TITLEBARINFO ti = new Interop.TITLEBARINFO();
 			IntPtr hwndTry = IntPtr.Zero;
 			IntPtr hwndWalk = IntPtr.Zero;
@@ -253,10 +255,10 @@ namespace PanelShell
 				return false;
 
 			// the following removes some task tray programs and "Program Manager"
-			ti.cbSize = (uint)Marshal.SizeOf<Interop.TITLEBARINFO>();
+			/*ti.cbSize = (uint)Marshal.SizeOf<Interop.TITLEBARINFO>();
 			Interop.GetTitleBarInfo(hwnd, ref ti);
 			if ((ti.rgstate[0] & Interop.STATE_SYSTEM_INVISIBLE) != 0)
-				return false;
+				return false;*/
 
 			// Tool windows should not be displayed either, these do not appear in the
 			// task bar.
