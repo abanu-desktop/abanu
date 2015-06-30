@@ -15,10 +15,13 @@ namespace PanelShell
 			: base(Gtk.WindowType.Toplevel)
 		{
 			Current = this;
+			SetSizeRequest(800, 800);
 			var tab = new TextTagTable();
 			buf = new TextBuffer(tab);
 			var en = new TextView(buf);
-			Add(en);
+			var sv = new ScrolledWindow();
+			sv.Add(en);
+			Add(sv);
 
 			ShowAll();
 		}

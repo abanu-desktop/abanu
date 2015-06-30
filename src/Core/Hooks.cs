@@ -14,6 +14,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using HWND = System.IntPtr;
 
 namespace Microsoft.Win32
 {
@@ -235,6 +236,173 @@ namespace Microsoft.Win32
 
 		[DllImport("user32", EntryPoint = "GetWindowTextLengthA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		public static extern int GetWindowTextLength(IntPtr hwnd);
+
+		[DllImport("user32")]
+		public static extern bool EnumWindows(WNDENUMPROC func, IntPtr lParam);
+
+		public delegate bool WNDENUMPROC(HWND hwnd,IntPtr lParam);
+
+		[DllImport("user32")]
+		public static extern bool IsWindowVisible(HWND hWnd);
+
+		[DllImport("user32")]
+		public static extern HWND GetAncestor(HWND hWnd, uint gaFlags);
+
+		[DllImport("user32")]
+		public static extern HWND GetLastActivePopup(HWND hWnd);
+
+		public static uint GA_PARENT = 1;
+		public static uint GA_ROOT = 2;
+		public static uint GA_ROOTOWNER = 3;
+
+		[DllImport("user32")]
+		public static extern bool GetTitleBarInfo(HWND hWnd, ref TITLEBARINFO pti);
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct TITLEBARINFO
+		{
+			public const int CCHILDREN_TITLEBAR = 5;
+			public uint cbSize;
+			public RECT rcTitleBar;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = CCHILDREN_TITLEBAR + 1)]
+			public uint[] rgstate;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct RECT
+		{
+			public int Left, Top, Right, Bottom;
+		}
+
+		public static uint STATE_SYSTEM_FOCUSABLE = 0x00100000;
+		public static uint STATE_SYSTEM_INVISIBLE = 0x00008000;
+		public static uint STATE_SYSTEM_OFFSCREEN = 0x00010000;
+		public static uint STATE_SYSTEM_UNAVAILABLE = 0x00000001;
+		public static uint STATE_SYSTEM_PRESSED = 0x00000008;
+
+		[DllImport("user32.dll", SetLastError = true)]
+		public static extern long GetWindowLong(IntPtr hWnd, int nIndex);
+
+		public const int GWL_EXSTYLE = -20;
+		public const int GWL_HINSTANCE = -6;
+		public const int GWL_ID = -12;
+		public const int GWL_STYLE = -16;
+		public const int GWL_USERDATA = -21;
+		public const int GWL_WNDPROC = -4;
+	
+
+		// Window Styles
+		public const UInt32 WS_OVERLAPPED = 0;
+		public const UInt32 WS_POPUP = 0x80000000;
+		public const UInt32 WS_CHILD = 0x40000000;
+		public const UInt32 WS_MINIMIZE = 0x20000000;
+		public const UInt32 WS_VISIBLE = 0x10000000;
+		public const UInt32 WS_DISABLED = 0x8000000;
+		public const UInt32 WS_CLIPSIBLINGS = 0x4000000;
+		public const UInt32 WS_CLIPCHILDREN = 0x2000000;
+		public const UInt32 WS_MAXIMIZE = 0x1000000;
+		public const UInt32 WS_CAPTION = 0xC00000;
+		// WS_BORDER or WS_DLGFRAME
+		public const UInt32 WS_BORDER = 0x800000;
+		public const UInt32 WS_DLGFRAME = 0x400000;
+		public const UInt32 WS_VSCROLL = 0x200000;
+		public const UInt32 WS_HSCROLL = 0x100000;
+		public const UInt32 WS_SYSMENU = 0x80000;
+		public const UInt32 WS_THICKFRAME = 0x40000;
+		public const UInt32 WS_GROUP = 0x20000;
+		public const UInt32 WS_TABSTOP = 0x10000;
+		public const UInt32 WS_MINIMIZEBOX = 0x20000;
+		public const UInt32 WS_MAXIMIZEBOX = 0x10000;
+		public const UInt32 WS_TILED = WS_OVERLAPPED;
+		public const UInt32 WS_ICONIC = WS_MINIMIZE;
+		public const UInt32 WS_SIZEBOX = WS_THICKFRAME;
+
+		// Extended Window Styles
+		public const UInt32 WS_EX_DLGMODALFRAME = 0x0001;
+		public const UInt32 WS_EX_NOPARENTNOTIFY = 0x0004;
+		public const UInt32 WS_EX_TOPMOST = 0x0008;
+		public const UInt32 WS_EX_ACCEPTFILES = 0x0010;
+		public const UInt32 WS_EX_TRANSPARENT = 0x0020;
+		public const UInt32 WS_EX_MDICHILD = 0x0040;
+		public const UInt32 WS_EX_TOOLWINDOW = 0x0080;
+		public const UInt32 WS_EX_WINDOWEDGE = 0x0100;
+		public const UInt32 WS_EX_CLIENTEDGE = 0x0200;
+		public const UInt32 WS_EX_CONTEXTHELP = 0x0400;
+		public const UInt32 WS_EX_RIGHT = 0x1000;
+		public const UInt32 WS_EX_LEFT = 0x0000;
+		public const UInt32 WS_EX_RTLREADING = 0x2000;
+		public const UInt32 WS_EX_LTRREADING = 0x0000;
+		public const UInt32 WS_EX_LEFTSCROLLBAR = 0x4000;
+		public const UInt32 WS_EX_RIGHTSCROLLBAR = 0x0000;
+		public const UInt32 WS_EX_CONTROLPARENT = 0x10000;
+		public const UInt32 WS_EX_STATICEDGE = 0x20000;
+		public const UInt32 WS_EX_APPWINDOW = 0x40000;
+		public const UInt32 WS_EX_OVERLAPPEDWINDOW = (WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE);
+		public const UInt32 WS_EX_PALETTEWINDOW = (WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST);
+		public const UInt32 WS_EX_LAYERED = 0x00080000;
+		public const UInt32 WS_EX_NOINHERITLAYOUT = 0x00100000;
+		// Disable inheritence of mirroring by children
+		public const UInt32 WS_EX_LAYOUTRTL = 0x00400000;
+		// Right to left mirroring
+		public const UInt32 WS_EX_COMPOSITED = 0x02000000;
+		public const UInt32 WS_EX_NOACTIVATE = 0x08000000;
+
+		[DllImport("user32")]
+		public static extern bool BringWindowToTop(HWND hwnd);
+
+		[DllImport("user32.dll")]
+		static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+		[DllImport("user32.dll")]
+		static extern IntPtr LoadIcon(IntPtr hInstance, IntPtr lpIconName);
+
+		[DllImport("user32.dll", EntryPoint = "GetClassLong")]
+		static extern uint GetClassLong32(IntPtr hWnd, int nIndex);
+
+		[DllImport("user32.dll", EntryPoint = "GetClassLongPtr")]
+		static extern IntPtr GetClassLong64(IntPtr hWnd, int nIndex);
+
+		/// <summary>
+		/// 64 bit version maybe loses significant 64-bit specific information
+		/// </summary>
+		static IntPtr GetClassLongPtr(IntPtr hWnd, int nIndex)
+		{
+			if (IntPtr.Size == 4)
+				return new IntPtr((long)GetClassLong32(hWnd, nIndex));
+			else
+				return GetClassLong64(hWnd, nIndex);
+		}
+
+
+		public static uint WM_GETICON = 0x007f;
+		public static IntPtr ICON_SMALL2 = new IntPtr(2);
+		public static IntPtr IDI_APPLICATION = new IntPtr(0x7F00);
+		public static int GCL_HICON = -14;
+
+		public static System.Drawing.Icon GetSmallWindowIcon(IntPtr hWnd)
+		{
+			try {
+				IntPtr hIcon = default(IntPtr);
+
+				hIcon = SendMessage(hWnd, WM_GETICON, ICON_SMALL2, IntPtr.Zero);
+
+				if (hIcon == IntPtr.Zero)
+					hIcon = GetClassLongPtr(hWnd, GCL_HICON);
+
+				if (hIcon == IntPtr.Zero)
+					hIcon = LoadIcon(IntPtr.Zero, (IntPtr)0x7F00/*IDI_APPLICATION*/);
+
+				if (hIcon != IntPtr.Zero)
+					return System.Drawing.Icon.FromHandle(hIcon);
+				else
+					return null;
+			} catch (Exception) {
+				return null;
+			}
+		}
+
 	}
+
+
 
 }

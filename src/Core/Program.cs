@@ -19,6 +19,7 @@ namespace PanelShell
 			AppLib.log("log started");
 
 			var shellMan = ShellManager.Create();
+			shellMan.UpdateWindows();
 
 			var pwin = new TPanel();
 			pwin.Setup();

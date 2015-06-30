@@ -34,7 +34,9 @@ namespace PanelShell
 			SetOrientation(Orientation.Horizontal);
 			SetPos(0, new Point(0, 0), 30, 1, 100.0, EDock.Top);
 
-			var plug = new MenuPlugin();
+			TPlugin plug = new MenuPlugin();
+			AddPlugin(plug);
+			plug = new TasksPlugin();
 			AddPlugin(plug);
 		}
 
