@@ -398,6 +398,9 @@ namespace Microsoft.Win32
 		public static IntPtr IDI_APPLICATION = new IntPtr(0x7F00);
 		public static int GCL_HICON = -14;
 
+		[DllImport("shell32.dll", CharSet = CharSet.Auto)]
+		public static extern int ExtractIconEx(string stExeFileName, int nIconIndex, ref IntPtr phiconLarge, ref IntPtr phiconSmall, int nIcons);
+
 		public static System.Drawing.Icon GetSmallWindowIcon(IntPtr hWnd)
 		{
 			try {

@@ -456,8 +456,10 @@ namespace PanelShell
 
 			ResolveShortcut(path, out name, out command, out args, out description, out iconLocation, out iconIndex);
 
+			command = Environment.ExpandEnvironmentVariables(command);
+
 			if (!File.Exists(command)) {
-				var newCommand = command.Replace("\\Program Files (x86)", "\\Program Files").Replace("\\system32", "Sysnative");
+				var newCommand = command.Replace("\\Program Files (x86)", "\\Program Files").Replace("\\system32", "\\Sysnative");
 				if (File.Exists(newCommand)) {
 					command = newCommand;
 				} else {
@@ -478,20 +480,33 @@ namespace PanelShell
 
 			if (!File.Exists(iconLocation)) {
 				//AppLib.log("COMMAND NOT FOUND: " + command);
-				iconLocation = iconLocation.Replace("\\Program Files (x86)", "\\Program Files");
+				iconLocation = iconLocation.Replace("\\Program Files (x86)", "\\Program Files").Replace("\\system32", "\\Sysnative");
 			}
 
 			if (File.Exists(iconLocation)) {
 
 
-				var ext = new TsudaKageyu.IconExtractor(iconLocation);
-				var ico = ext.GetIcon(iconIndex);
-				AppLib.log(ico.Size.ToString());
+				//var ext = new TsudaKageyu.IconExtractor(iconLocation);
+				//var ico = ext.GetIcon(iconIndex);
+
+				IntPtr p1 = new IntPtr();
+				IntPtr p2 = new IntPtr();
+				Microsoft.Win32.Interop.ExtractIconEx(iconLocation, iconIndex, ref p1, ref p2, 1); 
+				System.Drawing.Icon ico;
+				if (p1 != IntPtr.Zero)
+					ico = System.Drawing.Icon.FromHandle(p1);
+				else
+					ico = System.Drawing.Icon.FromHandle(p2);
+
 				var ms = new MemoryStream();
 				ico.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 				entry.IconStored = ms.ToArray();
 			} else {
 				AppLib.log("ICON LOCATION NOT FOUND: " + iconLocation);
+			}
+
+			if (path.Contains("ANNO")) {
+				var s = "";
 			}
 
 			entry.Name = name;
@@ -682,11 +697,11 @@ namespace PanelShell
 			ShellLink link = new ShellLink();
 			((IPersistFile)link).Load(filename, STGM_READ);
 			// TODO: if I can get hold of the hwnd call resolve first. This handles moved and renamed files.  
-			// ((IShellLinkW)link).Resolve(hwnd, 0) 
+			((IShellLinkW)link).Resolve(IntPtr.Zero, SLR_FLAGS.SLR_ANY_MATCH);
 
 			StringBuilder sb = new StringBuilder(MAX_PATH);
 			WIN32_FIND_DATAW data = new WIN32_FIND_DATAW();
-			((IShellLinkW)link).GetPath(sb, sb.Capacity, out data, 0);
+			((IShellLinkW)link).GetPath(sb, sb.Capacity, out data, SLGP_FLAGS.SLGP_RAWPATH);
 			command = sb.ToString(); 
 
 			sb = new StringBuilder(MAX_PATH); //MAX_PATH?
