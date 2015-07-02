@@ -2,7 +2,9 @@
 using Lucene.Net.Documents;
 using Lucene.Net.Store;
 using Lucene.Net.Index;
+using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
+using Lucene.Net.Analysis.Standard;
 using System.IO;
 using System.Collections.Generic;
 using Lucene.Net.Analysis;
@@ -10,6 +12,7 @@ using Gtk;
 using Gdk;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Linq;
 
 namespace PanelShell
 {
@@ -38,6 +41,9 @@ namespace PanelShell
 
 		public void CreateCategories()
 		{
+			AddCategory("", "All").meta = true;
+			AddCategory("", "Recently Used").meta = true;
+			AddCategory("", "Favorites").meta = true;
 			AddCategory("applications-office", "Multimedia", "AudioVideo");
 			AddCategory("applications-accessories", "Accessories", "Utility");
 			AddCategory("applications-graphics", "Graphics");
@@ -48,26 +54,27 @@ namespace PanelShell
 			AddCategory("applications-development", "Development");
 			AddCategory("applications-engineering", "Engineering");
 			AddCategory("applications-science", "Education");
-			AddCategory("applications-system", "applications-system", "System");
+			AddCategory("applications-system", "System");
 			AddCategory("preferences-desktop", "Settings");
 			//AddCategory("Favorites");
 			//AddCategory("Recently Used");
 		}
 
-		public void AddCategory(string icon, string Main, params string[] names)
+		public TLauncherCategory AddCategory(string icon, string Main, params string[] names)
 		{
 			var cat = new TLauncherCategory(){ Name = Main, IconName = icon };
 			Categories.Add(cat);
 			catHash.Add(Main, cat);
 			foreach (var nam in names)
 				catHash.Add(nam, cat);
+			return cat;
 		}
 
 		private List<string> dirs = new List<string>();
 
 		public void AddLocation(string loc)
 		{
-			dirs.Add(loc);
+			dirs.Add(Environment.ExpandEnvironmentVariables(loc));
 		}
 
 		public void AddLocations()
@@ -75,7 +82,8 @@ namespace PanelShell
 			if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				AddLocation("/usr/share/applications");
 			} else {
-				AddLocation(@"C:\ProgramData\Microsoft\Windows\Start Menu");
+				AddLocation(@"%programdata%\Microsoft\Windows\Start Menu");
+				AddLocation(@"%appdata%\Microsoft\Windows\Start Menu");
 			}
 		}
 
@@ -85,7 +93,7 @@ namespace PanelShell
 				System.IO.Directory.CreateDirectory(storeDir);
 
 			var d = FSDirectory.Open(new DirectoryInfo(storeDir));
-			writer = new IndexWriter(d, new WhitespaceAnalyzer(), true, IndexWriter.MaxFieldLength.UNLIMITED);
+			writer = new IndexWriter(d, new Lucene.Net.Analysis.Standard.StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_CURRENT), true, IndexWriter.MaxFieldLength.UNLIMITED);
 
 			//reader = new IndexSearcher(d);
 		}
@@ -111,23 +119,28 @@ namespace PanelShell
 			Clear();
 			OpenWrite();
 			foreach (var dir in dirs)
-				foreach (var f in GetFiles(dir,"*.desktop"))
+				foreach (var f in GetFiles(dir,new string[]{"*.desktop", "*.lnk"}))
 					AddLink(f);
 			FlushWrite();
 			CloseWrite();
 			OpenReader();
 		}
 
-		private IEnumerable<string> GetFiles(string dir, string pattern)
+		private IEnumerable<string> GetFiles(string dir, string[] pattern)
 		{
-			string[] files = new string[]{ };
+			var filesList = new List<string[]>();
 			try {
-				files = System.IO.Directory.GetFiles(dir);
+				foreach (var pat in pattern) {
+					string[] files = new string[]{ };
+					files = System.IO.Directory.GetFiles(dir, pat);
+					filesList.Add(files);
+				}
 			} catch (UnauthorizedAccessException ex) {
 			}
 
-			foreach (var f in files)
-				yield return f;
+			foreach (var files in filesList)
+				foreach (var f in files)
+					yield return f;
 
 			string[] subDirs = new string[]{ };
 
@@ -186,14 +199,46 @@ namespace PanelShell
 				yield return new TLauncherEntry(reader.Doc(i));
 		}
 
+		public IEnumerable<TLauncherEntry> BySearch(string txt)
+		{
+			if (string.IsNullOrEmpty(txt))
+				yield break;
+
+			var exp = string.Format("label:*{0}* description:*{0}*", txt);
+			foreach (var itm in BySearchExpression(exp))
+				yield return itm;
+		}
+
+		public IEnumerable<TLauncherEntry> BySearchExpression(string exp)
+		{
+			if (string.IsNullOrEmpty(exp))
+				yield break;
+
+			TopDocs hits = null;
+			try {
+				
+				var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_CURRENT, new string[] {
+					"label",
+					"description",
+					"category"
+				}, new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_CURRENT));
+				parser.AllowLeadingWildcard = true;
+				hits = reader.Search(parser.Parse(exp), 1000);
+			} catch (Exception ex) {
+				AppLib.log(ex.ToString());
+			}
+			if (hits != null)
+				for (var i = 0; i < hits.TotalHits; i++)
+					yield return new TLauncherEntry(reader.Doc(hits.ScoreDocs[i].Doc));
+		}
+
 		public IEnumerable<TLauncherEntry> ByCategory(TLauncherCategory entry)
 		{
-			var term = new Term("category", entry.Name);
-			var query = new TermQuery(term);
-			var hits = reader.Search(query, 1000);
+			if (entry.Name == "All") {
+				return All();
+			}
 
-			for (var i = 0; i < hits.TotalHits; i++)
-				yield return new TLauncherEntry(reader.Doc(hits.ScoreDocs[i].Doc));
+			return BySearchExpression("category:" + entry.Name);
 		}
 
 		public List<TLauncherCategory> Categories = new List<TLauncherCategory>();
@@ -210,6 +255,8 @@ namespace PanelShell
 				return !string.IsNullOrEmpty(IconName);
 			}
 		}
+
+		public bool meta = false;
 
 	}
 
@@ -358,10 +405,12 @@ namespace PanelShell
 
 		public static TLauncherEntry CreateFromFile(string path)
 		{
-			if (Path.GetExtension(path) == ".lnk")
+			AppLib.log("ADD LINK: " + path);
+			if (Path.GetExtension(path).ToLower() == ".lnk")
 				return CreateFromFileLnk(path);
 			else
 				return CreateFromFileDesktop(path);
+			
 		}
 
 		private static TLauncherEntry CreateFromFileDesktop(string path)
@@ -379,7 +428,6 @@ namespace PanelShell
 
 		private static TLauncherEntry CreateFromFileLnk(string path)
 		{
-			AppLib.log("#");
 			var entry = new TLauncherEntry();
 
 			string name, command, args, description, iconLocation;
@@ -387,20 +435,44 @@ namespace PanelShell
 
 			ResolveShortcut(path, out name, out command, out args, out description, out iconLocation, out iconIndex);
 
-			if (!string.IsNullOrEmpty(iconLocation)) {
-				var ext = new TsudaKageyu.IconExtractor(Environment.ExpandEnvironmentVariables(iconLocation));
+			if (!File.Exists(command)) {
+				AppLib.log("COMMAND NOT FOUND: '" + command + "'");
+				command = command.Replace("\\Program Files (x86)", "\\Program Files");
+			}
+
+			if (string.IsNullOrEmpty(iconLocation)) {
+				iconLocation = command;
+				iconIndex = 0;
+			}
+
+			//if (name == "Steam") {
+			//	AppLib.log("########################################################" + iconLocation);
+			//}
+
+			iconLocation = Environment.ExpandEnvironmentVariables(iconLocation);
+
+			if (!File.Exists(iconLocation)) {
+				//AppLib.log("COMMAND NOT FOUND: " + command);
+				iconLocation = iconLocation.Replace("\\Program Files (x86)", "\\Program Files");
+			}
+
+			if (File.Exists(iconLocation)) {
+
+
+				var ext = new TsudaKageyu.IconExtractor(iconLocation);
 				var ico = ext.GetIcon(iconIndex);
 				AppLib.log(ico.Size.ToString());
 				var ms = new MemoryStream();
 				ico.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 				entry.IconStored = ms.ToArray();
+			} else {
+				AppLib.log("ICON LOCATION NOT FOUND: " + iconLocation);
 			}
 
 			entry.Name = name;
 			entry.Command = command + " " + args;
 			entry.Description = description;
 
-			AppLib.log(entry.Name);
 			return entry;
 		}
 
@@ -516,8 +588,8 @@ namespace PanelShell
 			void SetShowCmd(int iShowCmd);
 
 			/// <summary>Retrieves the location (path and index) of the icon for a Shell link object</summary>
-			void GetIconLocation([Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath,
-			                     int cchIconPath, out int piIcon);
+			int GetIconLocation([Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath,
+			                    int cchIconPath, out int piIcon);
 
 			/// <summary>Sets the location (path and index) of the icon for a Shell link object</summary>
 			void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
@@ -603,10 +675,13 @@ namespace PanelShell
 			}
 
 			sb = new StringBuilder(MAX_PATH); //MAX_PATH?
-			((IShellLinkW)link).GetIconLocation(sb, sb.Capacity, out iconIndex);
+			var hresult = ((IShellLinkW)link).GetIconLocation(sb, sb.Capacity, out iconIndex);
 			iconLocation = sb.ToString(); 
+			if (hresult != 0) {
+				AppLib.log("GetIconLocation result: " + hresult);
+			}
 
-			name = Path.GetFileNameWithoutExtension(filename);
+			name = Testing.TestGetLocalizedName.GetName(filename);
 		}
 
 		#endregion

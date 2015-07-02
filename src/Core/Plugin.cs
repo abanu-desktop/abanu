@@ -40,20 +40,39 @@ namespace PanelShell
 		public void Open()
 		{
 			if (win == null) {
-				win = new LauncherMenuWindow();
+				win = new LauncherMenuWindow(this);
 			}
 			win.Show();
+			var alloc = button.Allocation;
+			win.Move(alloc.X, alloc.Height);
 		}
 
 		public class LauncherMenuWindow : Gtk.Window
 		{
-			public LauncherMenuWindow()
+
+			private MenuPlugin plug;
+
+			public LauncherMenuWindow(MenuPlugin plug)
 				: base(Gtk.WindowType.Toplevel)
 			{
-				SetSizeRequest(400, 400);
+				this.plug = plug;
+				SetSizeRequest(500, 500);
 				var wid = new LauncherWidget();
 				Add(wid);
 				wid.Show();
+				Decorated = false;
+			}
+
+			protected override bool OnFocusOutEvent(EventFocus evnt)
+			{
+				Hide();
+				return base.OnFocusOutEvent(evnt);
+			}
+
+			protected override void OnHidden()
+			{
+				plug.button.Active = false;
+				base.OnHidden();
 			}
 
 		}

@@ -11,31 +11,40 @@ using Gdk;
 
 namespace PanelShell
 {
-	public class LauncherWidget : HPaned
+	public class LauncherWidget : VBox
 	{
-		
+
+		private HPaned hpaned;
+
 		public LauncherWidget()
 		{
-			/*var tab = new TextTagTable();
-			var buf = new TextBuffer(tab);
-			var tb = new TextView(buf);
-			this.Add(tb);
-			tb.HeightRequest = 20;
-*/
+			var tb = new Entry("");
+			tb.SetIconFromIconName(EntryIconPosition.Secondary, "search");
+			tb.Changed += (s, e) => {
+				ShowSearch(tb.Text);
+			};
 
+			tb.Margin = 5;
+			//tb.BorderWidth = 1;
+			PackStart(tb, false, false, 0);
 
+			hpaned = new HPaned();
+
+			Add(hpaned);
 
 			/*Add(CreateList());
 			Add(CreateList());*/
 
 
 			var appList = CreateAppList();
-			Add1(appList);
-			Add2(CreateCatList());
+			hpaned.Add1(appList);
+			hpaned.Add2(CreateCatList());
 
 			ShowAllApps();
 
 			ShowAll();
+			allButton.Active = true;
+			lastActiveButton = allButton;
 		}
 
 		private Widget CreateAppList()
@@ -79,8 +88,24 @@ namespace PanelShell
 		private ListStore appListStore;
 		private TreeView appTv;
 
+		public void ShowSearch(string txt)
+		{
+			if (!string.IsNullOrEmpty(txt)) {
+				ShowApps(TLauncherIndex.Current.BySearch(txt));	
+				hpaned.Child2.Hide();
+				hpaned.HandleWindow.Hide();
+			} else {
+				hpaned.Child2.Show();
+				hpaned.HandleWindow.Show();
+				ShowCategory(lastActiveCat);
+			}
+		}
+
+		private TLauncherCategory lastActiveCat;
+
 		public void ShowCategory(TLauncherCategory entry)
 		{
+			lastActiveCat = entry;
 			ShowApps(TLauncherIndex.Current.ByCategory(entry));
 		}
 
@@ -97,8 +122,11 @@ namespace PanelShell
 
 		public void ShowAllApps()
 		{
-			ShowApps(TLauncherIndex.Current.All());
+			ShowCategory(TLauncherIndex.Current.catHash["All"]);
 		}
+
+		private ToggleButton2 allButton;
+		private ToggleButton2 lastActiveButton;
 
 		private Widget CreateCatList()
 		{
@@ -114,11 +142,14 @@ namespace PanelShell
 
 			box.Add(tb);
 
-			foreach (var entry in TLauncherIndex.Current.Categories) {
-				var bt = createCatButton(entry);
-				//box.PackStart(bt, false, false, 2);
-				tb.Add(bt);
-			}
+			allButton = createCatButton(TLauncherIndex.Current.catHash["All"]);
+			tb.Add(allButton);
+
+			tb.Add(new SeparatorToolItem());
+
+			foreach (var entry in TLauncherIndex.Current.Categories)
+				if (!entry.meta)
+					tb.Add(createCatButton(entry));
 
 			var frame = new Frame();
 			frame.Add(scroll);
@@ -129,16 +160,17 @@ namespace PanelShell
 
 		private bool inToggle = false;
 
-		public Widget createCatButton(TLauncherCategory entry)
+		private ToggleButton2 createCatButton(TLauncherCategory entry)
 		{
 			
 			var bt = new  ToggleButton2("");
 
-			//bt.Label = entry.Name;
-			var lab = new Label(entry.Name);
-			bt.LabelWidget = lab;
-			//lab.SetAlignment(0f, 0f);
-			//lab.Justify = Justification.Left;
+			var b = new HBox();
+			var l = new Label(entry.Name);
+			b.PackStart(l, false, false, 0);
+			l.Justify = Justification.Left;
+
+			bt.LabelWidget = b;
 
 			if (entry.HasIcon) {
 				if (Environment.OSVersion.Platform == PlatformID.Unix)
@@ -176,6 +208,7 @@ namespace PanelShell
 					bt.Active = true;
 
 					ShowCategory(entry);
+					lastActiveButton = bt;
 
 				} finally {
 					inToggle = false;
@@ -197,7 +230,9 @@ namespace PanelShell
 			public ToggleButton2(string label)
 				: base(label)
 			{
-				
+			
+
+
 			}
 
 			/*protected override bool OnButtonPressEvent(EventButton evnt)
