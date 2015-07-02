@@ -16,15 +16,46 @@ namespace PanelShell
 	public class MenuPlugin : TPlugin
 	{
 
-		private Button button;
+		private ToggleButton button;
 
 		public MenuPlugin()
 		{
-			widget = button = new Button();
+			widget = button = new ToggleButton();
 			button.Add(new Label("Menu"));
 			button.Clicked += (s, e) => {
-				
+				if (button.Active)
+					Open();
+				else
+					Close();
 			};
+		}
+
+		private LauncherMenuWindow win;
+
+		public void Close()
+		{
+			win.Hide();
+		}
+
+		public void Open()
+		{
+			if (win == null) {
+				win = new LauncherMenuWindow();
+			}
+			win.Show();
+		}
+
+		public class LauncherMenuWindow : Gtk.Window
+		{
+			public LauncherMenuWindow()
+				: base(Gtk.WindowType.Toplevel)
+			{
+				SetSizeRequest(400, 400);
+				var wid = new LauncherWidget();
+				Add(wid);
+				wid.Show();
+			}
+
 		}
 
 	}

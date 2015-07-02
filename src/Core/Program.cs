@@ -21,6 +21,10 @@ namespace PanelShell
 			var shellMan = ShellManager.Create();
 			shellMan.UpdateWindows();
 
+			var idx = new TLauncherIndex();
+			idx.AddLocation("/usr/share/applications");
+			idx.Rebuild();
+
 			var pwin = new TPanel();
 			pwin.Setup();
 			pwin.Show();

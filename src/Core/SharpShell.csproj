@@ -39,6 +39,9 @@
     <Reference Include="gio-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
+    <Reference Include="Lucene.Net">
+      <HintPath>..\..\lib\Lucene.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -57,6 +60,9 @@
     <Compile Include="Shell.cs" />
     <Compile Include="lib.cs" />
     <Compile Include="LogWindow.cs" />
+    <Compile Include="LauncherLib.cs" />
+    <Compile Include="INIFile.cs" />
+    <Compile Include="LauncherMenu.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
