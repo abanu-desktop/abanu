@@ -204,7 +204,7 @@ namespace PanelShell
 			if (string.IsNullOrEmpty(txt))
 				yield break;
 
-			var exp = string.Format("label:*{0}* description:*{0}*", txt);
+			var exp = string.Format("label:*{0}* description:*{0}* command-file:*{0}*", txt);
 			foreach (var itm in BySearchExpression(exp))
 				yield return itm;
 		}
@@ -319,12 +319,30 @@ namespace PanelShell
 			}
 		}
 
-		public string Command { 
+		public string CommandFile { 
 			get { 
-				return Get("command");
+				return Get("command-file");
 			}
 			set { 
-				Set("command", value);
+				Set("command-file", value);
+			}
+		}
+
+		public string CommandPath { 
+			get { 
+				return Get("command-path");
+			}
+			set { 
+				Set("command-path", value);
+			}
+		}
+
+		public string CommandArgs { 
+			get { 
+				return Get("command-args");
+			}
+			set { 
+				Set("command-args", value);
 			}
 		}
 
@@ -418,7 +436,10 @@ namespace PanelShell
 			var ini = new INIFile(path);
 			var entry = new TLauncherEntry();
 			entry.Name = ini.GetValue("Desktop Entry", "Name", "");
-			entry.Command = ini.GetValue("Desktop Entry", "Exec", "");
+			var cmd = ini.GetValue("Desktop Entry", "Exec", "");
+			entry.CommandPath = Path.GetDirectoryName(cmd);
+			entry.CommandFile = Path.GetFileName(cmd);
+			entry.CommandArgs = ""; //TODO
 			entry.Categories = ini.GetValue("Desktop Entry", "Categories", "");
 			entry.IconName = ini.GetValue("Desktop Entry", "Icon", "");
 			entry.Description = ini.GetValue("Desktop Entry", "Comment", "");
@@ -436,8 +457,12 @@ namespace PanelShell
 			ResolveShortcut(path, out name, out command, out args, out description, out iconLocation, out iconIndex);
 
 			if (!File.Exists(command)) {
-				AppLib.log("COMMAND NOT FOUND: '" + command + "'");
-				command = command.Replace("\\Program Files (x86)", "\\Program Files");
+				var newCommand = command.Replace("\\Program Files (x86)", "\\Program Files").Replace("\\system32", "Sysnative");
+				if (File.Exists(newCommand)) {
+					command = newCommand;
+				} else {
+					AppLib.log("COMMAND NOT FOUND: '" + command + "'");
+				}
 			}
 
 			if (string.IsNullOrEmpty(iconLocation)) {
@@ -470,7 +495,9 @@ namespace PanelShell
 			}
 
 			entry.Name = name;
-			entry.Command = command + " " + args;
+			entry.CommandPath = Path.GetDirectoryName(command);
+			entry.CommandFile = Path.GetFileName(command);
+			entry.CommandArgs = args;
 			entry.Description = description;
 
 			return entry;

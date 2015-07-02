@@ -24,6 +24,15 @@ namespace PanelShell
 				ShowSearch(tb.Text);
 			};
 
+			tb.KeyReleaseEvent += (s, e) => {
+				if (e.Event.Key == Gdk.Key.Return && appListStore.NColumns != 0) { //TODO: appListStore.NColumns does not work
+					hpaned.Child1.ChildFocus(DirectionType.TabForward);
+				}
+				if (e.Event.Key == Gdk.Key.Escape) {
+					Parent.Hide(); //TODO: detect Window
+				}
+			};
+
 			tb.Margin = 5;
 			//tb.BorderWidth = 1;
 			PackStart(tb, false, false, 0);
