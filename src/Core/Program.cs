@@ -14,20 +14,24 @@ namespace PanelShell
 			//var dwin = new DesktopWindow();
 			//dwin.Show();
 
-			var logwin = new LogWindow();
-			logwin.Show();
-			AppLib.log("log started");
+			try {
+				var logwin = new LogWindow();
+				logwin.Show();
+				AppLib.log("log started");
 
-			var shellMan = ShellManager.Create();
-			shellMan.UpdateWindows();
+				var shellMan = ShellManager.Create();
+				shellMan.UpdateWindows();
 
-			var idx = new TLauncherIndex();
-			idx.AddLocation("/usr/share/applications");
-			idx.Rebuild();
+				var idx = new TLauncherIndex();
+				idx.AddLocations();
+				idx.Rebuild();
 
-			var pwin = new TPanel();
-			pwin.Setup();
-			pwin.Show();
+				var pwin = new TPanel();
+				pwin.Setup();
+				pwin.Show();
+			} catch (Exception ex) {
+				new MessageDialog(null, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, ex.ToString()).Show();
+			}
 
 			Application.Run();
 		}

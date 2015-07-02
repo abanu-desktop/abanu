@@ -63,6 +63,12 @@
     <Compile Include="LauncherLib.cs" />
     <Compile Include="INIFile.cs" />
     <Compile Include="LauncherMenu.cs" />
+    <Compile Include="IconExtractor\IconExtractor.cs" />
+    <Compile Include="IconExtractor\IconUtil.cs" />
+    <Compile Include="IconExtractor\NativeMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="IconExtractor\" />
+  </ItemGroup>
 </Project>

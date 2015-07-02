@@ -41,17 +41,31 @@ namespace PanelShell
 		{
 			var scroll = new ScrolledWindow();
 
-			appListStore = new ListStore(typeof(string));
+			appListStore = new ListStore(typeof(string), typeof(Pixbuf));
 
-			var tv = new TreeView(appListStore);
-			scroll.Add(tv);
+			appTv = new TreeView();
+			scroll.Add(appTv);
 
-			var cellRender = new CellRendererText();
+
 			var col = new TreeViewColumn();
 			col.Title = "Name";
-			col.PackStart(cellRender, true);
-			col.AddAttribute(cellRender, "markup", 0);
-			tv.AppendColumn(col);
+
+			var colRender2 = new CellRendererPixbuf();
+			col.PackStart(colRender2, false);
+			col.AddAttribute(colRender2, "pixbuf", 1);
+
+			var colRender = new CellRendererText();
+			col.PackStart(colRender, true);
+			col.AddAttribute(colRender, "markup", 0);
+
+			appTv.AppendColumn(col);
+
+			/*var colRender2 = new CellRendererPixbuf();
+			var col2 = new TreeViewColumn();
+			col.Title = "Icon";
+			col.PackStart(colRender2, true);
+			appTv.AppendColumn("Icon", col2, colRender2, "pixbuf", 0);
+*/
 
 			var frame = new Frame();
 			frame.Add(scroll);
@@ -61,6 +75,7 @@ namespace PanelShell
 		}
 
 		private ListStore appListStore;
+		private TreeView appTv;
 
 		public void ShowCategory(TLauncherCategory entry)
 		{
@@ -69,10 +84,13 @@ namespace PanelShell
 
 		public void ShowApps(IEnumerable<TLauncherEntry> items)
 		{
+			appTv.Model = null; //performance
 			appListStore.Clear();
 			foreach (var entry in items) {
-				appListStore.AppendValues(entry.Name);
+				var markup = "<b>" + entry.Name + "</b>\n" + entry.Description;
+				appListStore.AppendValues(markup, entry.GetIconPixBuf());
 			}
+			appTv.Model = appListStore;
 		}
 
 		public void ShowAllApps()
@@ -91,8 +109,6 @@ namespace PanelShell
 			tb.Orientation = Orientation.Vertical;
 			tb.ToolbarStyle = ToolbarStyle.BothHoriz;
 			tb.ShowArrow = false;
-
-
 
 			box.Add(tb);
 
