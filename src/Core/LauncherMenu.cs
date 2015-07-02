@@ -29,7 +29,8 @@ namespace PanelShell
 			Add(CreateList());*/
 
 
-			Add1(CreateAppList());
+			var appList = CreateAppList();
+			Add1(appList);
 			Add2(CreateCatList());
 
 			ShowAllApps();
@@ -45,7 +46,7 @@ namespace PanelShell
 
 			appTv = new TreeView();
 			scroll.Add(appTv);
-
+			appTv.HeadersVisible = false;
 
 			var col = new TreeViewColumn();
 			col.Title = "Name";
@@ -55,6 +56,7 @@ namespace PanelShell
 			col.AddAttribute(colRender2, "pixbuf", 1);
 
 			var colRender = new CellRendererText();
+			colRender.Ellipsize = Pango.EllipsizeMode.End;
 			col.PackStart(colRender, true);
 			col.AddAttribute(colRender, "markup", 0);
 
