@@ -1,7 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell", "Core\SharpShell.csproj", "{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell.Panel", "SharpShell.Panel\SharpShell.Panel.csproj", "{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell.Win32", "SharpShell.Win32\SharpShell.Win32.csproj", "{791CA77A-3D53-4183-A6D8-357AC512CBE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell.Unix", "SharpShell.Unix\SharpShell.Unix.csproj", "{4257F2E8-9071-4043-979C-37F316B4F91C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell.Core", "SharpShell.Core\SharpShell.Core.csproj", "{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,5 +19,17 @@ Global
 		{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}.Debug|x86.Build.0 = Debug|x86
 		{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}.Release|x86.ActiveCfg = Release|x86
 		{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}.Release|x86.Build.0 = Release|x86
+		{4257F2E8-9071-4043-979C-37F316B4F91C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4257F2E8-9071-4043-979C-37F316B4F91C}.Debug|x86.Build.0 = Debug|Any CPU
+		{4257F2E8-9071-4043-979C-37F316B4F91C}.Release|x86.ActiveCfg = Release|Any CPU
+		{4257F2E8-9071-4043-979C-37F316B4F91C}.Release|x86.Build.0 = Release|Any CPU
+		{791CA77A-3D53-4183-A6D8-357AC512CBE8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{791CA77A-3D53-4183-A6D8-357AC512CBE8}.Debug|x86.Build.0 = Debug|Any CPU
+		{791CA77A-3D53-4183-A6D8-357AC512CBE8}.Release|x86.ActiveCfg = Release|Any CPU
+		{791CA77A-3D53-4183-A6D8-357AC512CBE8}.Release|x86.Build.0 = Release|Any CPU
+		{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}.Debug|x86.Build.0 = Debug|Any CPU
+		{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}.Release|x86.ActiveCfg = Release|Any CPU
+		{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

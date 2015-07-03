@@ -18,7 +18,7 @@ namespace PanelShell
 				var logwin = new LogWindow();
 				logwin.Show();
 				AppLib.log("log started");
-
+				//Gtk.Settings.Default.ThemeName = "Dorian-3.16";
 				var shellMan = ShellManager.Create();
 				shellMan.UpdateWindows();
 
