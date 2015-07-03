@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
 
+using Gdk;
+using Gtk;
+
 namespace SharpShell.Core
 {
 	public abstract class ShellManager
@@ -91,7 +94,7 @@ namespace SharpShell.Core
 			return true;
 		}
 
-		public virtual MemoryStream GetIcon()
+		public virtual Image GetIcon()
 		{
 			return null;
 		}

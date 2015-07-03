@@ -109,25 +109,78 @@ namespace SharpShell.Unix
 			int format;
 			int length;
 			byte[] data;
-			if (Gdk.Property.Get(wnd, Atom.Intern(name, false), null, 0, 1000, 0, out propType, out format, out length, out data)) {
-				return System.Text.Encoding.UTF8.GetString(data, 0, length);
-			}
+			using (var prop = Atom.Intern(name, false))
+				if (Gdk.Property.Get(wnd, prop, null, 0, uint.MaxValue, 0, out propType, out format, out length, out data)) {
+					return System.Text.Encoding.UTF8.GetString(data, 0, length);
+				}
 			return null;
+		}
+
+		//[DllImport("libX11", EntryPoint = "XGetWindowProperty")]
+		//public extern static int XGetWindowProperty(IntPtr display, IntPtr window, IntPtr atom, IntPtr long_offset, IntPtr long_length, bool delete, IntPtr req_type, out IntPtr actual_type, out int actual_format, out IntPtr nitems, out IntPtr bytes_after, out IntPtr prop);
+
+		public bool GetPropertyBinary2(string name, out int[] data)
+		{
+			using (var prop = Atom.Intern(name, false))
+				return Gdk.Property.Get(wnd, prop, false, out data);
 		}
 
 		public override string GetName()
 		{
-			return GetPropertyString("WM_NAME");
+			var name = GetPropertyString("WM_ICON_NAME");
+			if (name == null)
+				return "";
+			else
+				return name;
 		}
 
-		public string GetIconName()
+		/*public string GetIconName()
 		{
-			return GetPropertyString("WM_ICON_NAME");
-		}
+			return GetPropertyString("_NET_WM_ICON");
+		}*/
 
-		public override MemoryStream GetIcon()
+		public override  Image GetIcon()
 		{
-			//return Image.NewFromIconName("search");
+			int[] data;
+			GetPropertyBinary2("_NET_WM_ICON", out data);
+
+			if (data != null) {
+				int width = 1000;
+				int height = 1000;
+				int start = 0;
+				int i = 0;
+				while (i < data.Length) {
+					if (data[i] < width && data[i + 1] < height) {
+						width = data[i];
+						height = data[i + 1];
+						start = i;
+					}
+					i = i + 2 + data[i] * data[i + 1];
+				}
+
+				//try {
+				var pixelLen = width * height;
+				var byteLen = pixelLen * 4;
+				var neData = new int[pixelLen];
+				Array.Copy(data, start + 2, neData, 0, pixelLen);
+
+				var byteArray = new byte[byteLen];
+				Buffer.BlockCopy(neData, 0, byteArray, 0, byteArray.Length);
+
+				var byteArray2 = new byte[byteLen];
+
+				for (var n = 0; n < byteLen; n += 4) {
+					byteArray2[n + 0] = byteArray[n + 2];
+					byteArray2[n + 1] = byteArray[n + 1];
+					byteArray2[n + 2] = byteArray[n + 0];
+					byteArray2[n + 3] = byteArray[n + 3];
+				}
+
+				var pbuf = new Pixbuf(byteArray2, Colorspace.Rgb, true, 8, width, height, width * 4);
+				return new Image(pbuf);
+				//} catch (Exception ex) {
+				//}
+			}
 			return null;
 		}
 

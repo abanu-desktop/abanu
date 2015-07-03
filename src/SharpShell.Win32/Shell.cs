@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
 
+using Gdk;
+using Gtk;
+
 using SharpShell.Core;
 
 namespace SharpShell.Win32
@@ -178,7 +181,7 @@ namespace SharpShell.Win32
 			return IsAltTabWindow();
 		}
 
-		public override MemoryStream GetIcon()
+		public override Image GetIcon()
 		{
 			var ico = Interop.GetSmallWindowIcon(hwnd);
 			if (ico == null)
@@ -186,7 +189,7 @@ namespace SharpShell.Win32
 			var ms = new MemoryStream();
 			ico.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 			ms.Position = 0;
-			return ms;
+			return new Image(ms);
 		}
 
 	}
