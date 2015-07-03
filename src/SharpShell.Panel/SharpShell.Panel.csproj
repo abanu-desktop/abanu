@@ -13,7 +13,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>..\..\bin</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -23,7 +23,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>..\..\bin</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -58,14 +58,8 @@
     <Compile Include="lib.cs" />
     <Compile Include="LogWindow.cs" />
     <Compile Include="LauncherMenu.cs" />
-    <Compile Include="IconExtractor\IconExtractor.cs" />
-    <Compile Include="IconExtractor\IconUtil.cs" />
-    <Compile Include="IconExtractor\NativeMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="IconExtractor\" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpShell.Core\SharpShell.Core.csproj">
       <Project>{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}</Project>
