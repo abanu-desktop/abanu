@@ -12,6 +12,7 @@ namespace SharpShell.Panel
 		public static LogWindow Current;
 
 		private TextBuffer buf;
+		private ScrolledWindow sv;
 
 		public LogWindow()
 			: base(Gtk.WindowType.Toplevel)
@@ -21,7 +22,7 @@ namespace SharpShell.Panel
 			var tab = new TextTagTable();
 			buf = new TextBuffer(tab);
 			var en = new TextView(buf);
-			var sv = new ScrolledWindow();
+			sv = new ScrolledWindow();
 			sv.Add(en);
 			Add(sv);
 

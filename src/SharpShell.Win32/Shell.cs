@@ -84,7 +84,7 @@ namespace SharpShell.Win32
 		public override void UpdateWindows()
 		{
 			Interop.EnumWindows((hwnd, lParam) => {
-				TWindowWin32 wnd = (TWindowWin32)ShellManager.Current.Windows.GetOrCreate(hwnd);
+				TWindowWin32 wnd = (TWindowWin32)Windows.GetOrCreate(hwnd);
 
 				if (wnd.IsAltTabWindow())
 					wnd.Log();

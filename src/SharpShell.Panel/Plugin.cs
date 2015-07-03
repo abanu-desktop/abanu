@@ -176,11 +176,13 @@ namespace SharpShell.Panel
 			box.Add(but);
 
 			var ico = wnd.GetIcon();
-			var pbuf = new Pixbuf(ico);
-			var img = new Image(pbuf);
-			img.Events = EventMask.AllEventsMask;
-			//but.Image = img;
-			b.Add(img);
+			if (ico != null) {
+				var pbuf = new Pixbuf(ico);
+				var img = new Image(pbuf);
+				img.Events = EventMask.AllEventsMask;
+				//but.Image = img;
+				b.Add(img);
+			}
 
 			//but.Label = wnd.GetName();
 			//AppLib.log(but.Children.Length.ToString());
