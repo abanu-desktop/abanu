@@ -5,6 +5,9 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Xml.Linq;
+
+using SharpShell.Core;
 
 namespace SharpShell.Win32
 {
@@ -190,7 +193,7 @@ namespace SharpShell.Win32
 			ShellLink link = new ShellLink();
 			((IPersistFile)link).Load(filename, STGM_READ);
 			// TODO: if I can get hold of the hwnd call resolve first. This handles moved and renamed files.  
-			((IShellLinkW)link).Resolve(IntPtr.Zero, SLR_FLAGS.SLR_ANY_MATCH);
+			//((IShellLinkW)link).Resolve(IntPtr.Zero, SLR_FLAGS.SLR_ANY_MATCH);
 
 			StringBuilder sb = new StringBuilder(MAX_PATH);
 			WIN32_FIND_DATAW data = new WIN32_FIND_DATAW();
@@ -290,7 +293,31 @@ namespace SharpShell.Win32
 			entry.CommandArgs = args;
 			entry.Description = description;
 
+			SetCategory(entry);
+
 			return entry;
+		}
+
+		private static System.Xml.Linq.XDocument xdoc;
+
+		public static void SetCategory(TLauncherEntry entry)
+		{
+
+			if (xdoc == null)
+				xdoc = XDocument.Load("../res/categories/default.xml");
+
+			foreach (var itm in  xdoc.Root.Elements("Item")) {
+				var filter = itm.Attribute("Filter").Value;
+				var cat = itm.Attribute("Category").Value;
+				if (entry.Command.ToLower().Contains(filter)) {
+					entry.Categories = cat;
+					entry.UpdateMainCategory();
+					return;
+				}
+				entry.Categories = "None";
+				entry.MainCategory = "None";
+			}
+
 		}
 
 	}

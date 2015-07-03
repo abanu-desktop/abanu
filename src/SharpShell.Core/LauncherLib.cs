@@ -55,6 +55,7 @@ namespace SharpShell.Core
 			AddCategory("applications-science", "Education");
 			AddCategory("applications-system", "System");
 			AddCategory("preferences-desktop", "Settings");
+			AddCategory("", "None").meta = true;
 			//AddCategory("Favorites");
 			//AddCategory("Recently Used");
 		}
@@ -342,6 +343,17 @@ namespace SharpShell.Core
 			}
 			set { 
 				Set("command-args", value);
+			}
+		}
+
+		public string Command {
+			get { 
+				var s = Path.Combine(CommandPath, CommandFile);
+				var args = CommandArgs;
+				if (args != "") {
+					s += " " + args;
+				}
+				return s;
 			}
 		}
 

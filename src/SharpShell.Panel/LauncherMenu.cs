@@ -82,16 +82,9 @@ namespace SharpShell.Panel
 
 			appTv.AppendColumn(col);
 
-			/*var colRender2 = new CellRendererPixbuf();
-			var col2 = new TreeViewColumn();
-			col.Title = "Icon";
-			col.PackStart(colRender2, true);
-			appTv.AppendColumn("Icon", col2, colRender2, "pixbuf", 0);
-*/
-
 			var frame = new Frame();
 			frame.Add(scroll);
-			frame.SetSizeRequest(200, 200);
+			frame.SetSizeRequest(300, 200);
 
 			return frame;
 		}
@@ -161,6 +154,9 @@ namespace SharpShell.Panel
 			foreach (var entry in TLauncherIndex.Current.Categories)
 				if (!entry.meta)
 					tb.Add(createCatButton(entry));
+
+			var noneButton = createCatButton(TLauncherIndex.Current.catHash["None"]);
+			tb.Add(noneButton);
 
 			var frame = new Frame();
 			frame.Add(scroll);
