@@ -104,7 +104,7 @@ namespace SharpShell.Panel
 
 				var bt = GetButton(wnd);
 				if (bt != null) {
-					LibCore.Log("act");
+					CoreLib.Log("act");
 					Application.Invoke((s, e) => {
 						foreach (var b in buthash2.Values) {
 							b.Active = bt == b;
@@ -166,7 +166,7 @@ namespace SharpShell.Panel
 
 		private void createButton(TWindow wnd)
 		{
-			LibCore.Log(wnd.hwnd.ToString());
+			CoreLib.Log(wnd.hwnd.ToString());
 
 			var b = new HBox();
 			b.Events = EventMask.AllEventsMask;

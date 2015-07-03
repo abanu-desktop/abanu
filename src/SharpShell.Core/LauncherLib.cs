@@ -187,7 +187,7 @@ namespace SharpShell.Core
 				var entry = TLauncherEntry.CreateFromFile(file);
 				writer.AddDocument(entry.doc);
 			} catch (Exception ex) {
-				LibCore.Log(ex.ToString());
+				CoreLib.Log(ex.ToString());
 			}
 		}
 
@@ -224,7 +224,7 @@ namespace SharpShell.Core
 				parser.AllowLeadingWildcard = true;
 				hits = reader.Search(parser.Parse(exp), 1000);
 			} catch (Exception ex) {
-				LibCore.Log(ex.ToString());
+				CoreLib.Log(ex.ToString());
 			}
 			if (hits != null)
 				for (var i = 0; i < hits.TotalHits; i++)
@@ -414,7 +414,7 @@ namespace SharpShell.Core
 					else
 						return new Pixbuf(data);
 				} catch (Exception ex) {
-					LibCore.Log(ex.ToString());
+					CoreLib.Log(ex.ToString());
 				}
 				return null;
 			}
@@ -422,7 +422,7 @@ namespace SharpShell.Core
 
 		public static TLauncherEntry CreateFromFile(string path)
 		{
-			LibCore.Log("ADD LINK: " + path);
+			CoreLib.Log("ADD LINK: " + path);
 			return Factory.Current.ReadLinkFile(path);
 		}
 

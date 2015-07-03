@@ -19,7 +19,7 @@ namespace SharpShell.Panel
 			try {
 				var logwin = new LogWindow();
 				logwin.Show();
-				LibCore.Log("log started");
+				CoreLib.Log("log started");
 				//Gtk.Settings.Default.ThemeName = "Dorian-3.16";
 				var shellMan = ShellManager.Create();
 				shellMan.UpdateWindows();
@@ -32,7 +32,7 @@ namespace SharpShell.Panel
 				pwin.Setup();
 				pwin.Show();
 			} catch (Exception ex) {
-				LibCore.MessageBox(ex.ToString());
+				CoreLib.MessageBox(ex.ToString());
 			}
 
 			Application.Run();

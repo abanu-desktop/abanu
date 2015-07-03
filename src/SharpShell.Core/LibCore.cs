@@ -3,12 +3,16 @@ using Gtk;
 
 namespace SharpShell.Core
 {
-	public static class LibCore
+	public static class CoreLib
 	{
 		
 		public static void Log(string txt)
 		{
+			if (OnLog != null)
+				OnLog(txt);
 		}
+
+		public static event Action<string> OnLog;
 
 		public static void MessageBox(string text)
 		{
@@ -40,7 +44,7 @@ namespace SharpShell.Core
 			Win32 = Load("Win32");
 			Unix = Load("Unix");
 
-			if (LibCore.IsWin32)
+			if (CoreLib.IsWin32)
 				Current = Win32;
 			else
 				Current = Unix;

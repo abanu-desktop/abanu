@@ -19,7 +19,7 @@ namespace SharpShell.Win32
 		{
 			form = new SystemProcessHookForm();
 			form.WindowEvent += (s, e) => {
-				LibCore.Log((string)e);
+				CoreLib.Log((string)e);
 			};
 		}
 
@@ -115,7 +115,7 @@ namespace SharpShell.Win32
 
 		public override void BringToFront()
 		{
-			LibCore.Log("BringToFront");
+			CoreLib.Log("BringToFront");
 			//Interop.BringWindowToTop(hwnd);
 			Interop.ShowWindow(hwnd, Interop.SW_SHOW);	
 			if (Interop.IsIconic(hwnd))
@@ -134,7 +134,7 @@ namespace SharpShell.Win32
 
 		public void Log()
 		{
-			LibCore.Log("HWND: " + hwnd.ToString() + ", Name: " + GetName());
+			CoreLib.Log("HWND: " + hwnd.ToString() + ", Name: " + GetName());
 
 		}
 

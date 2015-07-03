@@ -2,6 +2,8 @@
 using Gtk;
 using Gdk;
 
+using SharpShell.Core;
+
 namespace SharpShell.Panel
 {
 	public class LogWindow : Gtk.Window
@@ -22,6 +24,8 @@ namespace SharpShell.Panel
 			var sv = new ScrolledWindow();
 			sv.Add(en);
 			Add(sv);
+
+			CoreLib.OnLog += (txt) => AppendText(txt);
 
 			ShowAll();
 		}

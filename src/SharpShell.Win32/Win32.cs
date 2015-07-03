@@ -236,7 +236,7 @@ namespace SharpShell.Win32
 			var hresult = ((IShellLinkW)link).GetIconLocation(sb, sb.Capacity, out iconIndex);
 			iconLocation = sb.ToString(); 
 			if (hresult != 0) {
-				LibCore.Log("GetIconLocation result: " + hresult);
+				CoreLib.Log("GetIconLocation result: " + hresult);
 			}
 
 			name = GetLocalizedName.GetName(filename);
@@ -260,7 +260,7 @@ namespace SharpShell.Win32
 				if (File.Exists(newCommand)) {
 					command = newCommand;
 				} else {
-					LibCore.Log("COMMAND NOT FOUND: '" + command + "'");
+					CoreLib.Log("COMMAND NOT FOUND: '" + command + "'");
 				}
 			}
 
@@ -288,10 +288,7 @@ namespace SharpShell.Win32
 
 				IntPtr p1 = new IntPtr();
 				IntPtr p2 = new IntPtr();
-
-				//TODO TODO TODO
-				//Microsoft.Win32.Interop.ExtractIconEx(iconLocation, iconIndex, ref p1, ref p2, 1); 
-				//TODO TODO TODO
+				Microsoft.Win32.Interop.ExtractIconEx(iconLocation, iconIndex, ref p1, ref p2, 1); 
 
 				System.Drawing.Icon ico;
 				if (p1 != IntPtr.Zero)
@@ -303,7 +300,7 @@ namespace SharpShell.Win32
 				ico.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 				entry.IconStored = ms.ToArray();
 			} else {
-				LibCore.Log("ICON LOCATION NOT FOUND: " + iconLocation);
+				CoreLib.Log("ICON LOCATION NOT FOUND: " + iconLocation);
 			}
 
 			if (path.Contains("ANNO")) {
