@@ -15,31 +15,64 @@ namespace SharpShell.Core
 			new MessageDialog(null, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, text).Show();
 		}
 
-		public static class Factory
-		{
-			public static FactoryActivator Current;
-			public static FactoryActivator Win32;
-			public static FactoryActivator Unix;
-
-			public static void Load()
-			{
-
+		public static bool IsWin32 {
+			get { 
+				return Environment.OSVersion.Platform != PlatformID.Unix;
 			}
 		}
 
-		public abstract class FactoryActivator
-		{
-
-			public void GetLauncherReader()
-			{
+		public static bool IsUnix {
+			get { 
+				return Environment.OSVersion.Platform == PlatformID.Unix;
 			}
-
-			public void GetShellManager()
-			{
-			}
-
 		}
 
 	}
+
+	public static class Factory
+	{
+		public static FactoryActivator Current;
+		public static FactoryActivator Win32;
+		public static FactoryActivator Unix;
+
+		static Factory()
+		{
+			Win32 = Load("Win32");
+			Unix = Load("Unix");
+
+			if (LibCore.IsWin32)
+				Current = Win32;
+			else
+				Current = Unix;
+		}
+
+		private static FactoryActivator Load(string platform)
+		{
+			var asm = System.Reflection.Assembly.LoadFrom("SharpShell." + platform + ".dll");
+			var t = asm.GetType("SharpShell." + platform + ".FactoryActivator");
+			return (FactoryActivator)Activator.CreateInstance(t);
+		}
+
+	}
+
+	public abstract class FactoryActivator
+	{
+
+		public abstract TWindow CreateWindow(IntPtr handle);
+
+		public virtual void GetLauncherReader()
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual ShellManager CreateShellManager()
+		{
+			throw new NotImplementedException();
+		}
+
+		public abstract TLauncherEntry ReadLinkFile(string file);
+
+	}
+
 }
 

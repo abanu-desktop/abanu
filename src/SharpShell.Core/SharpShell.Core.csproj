@@ -42,13 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Hooks.cs" />
     <Compile Include="INIFile.cs" />
-    <Compile Include="Native.cs" />
     <Compile Include="Shell.cs" />
     <Compile Include="LibCore.cs" />
     <Compile Include="LauncherLib.cs" />
-    <Compile Include="Temp.cs" />
     <Compile Include="IconExtractor\IconExtractor.cs" />
     <Compile Include="IconExtractor\IconUtil.cs" />
     <Compile Include="IconExtractor\NativeMethods.cs" />
