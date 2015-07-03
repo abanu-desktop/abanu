@@ -19,7 +19,9 @@ namespace SharpShell.Unix
 		public override void UpdateWindows()
 		{
 			foreach (var win in Screen.Default.WindowStack) {
-				Windows.GetOrCreate(win.Handle);
+				var wnd = new TWindowUnix(win.Handle);
+				if (wnd.ShowInTaskbar())
+					Windows.Add(wnd);
 			}
 		}
 
@@ -37,8 +39,8 @@ namespace SharpShell.Unix
 
 				if (lastActive == null || actWin.Handle != lastActive.Handle) {
 					lastActive = actWin;
-					CoreLib.Log(actWin.Height.ToString());
-					CoreLib.Log(Screen.Default.WindowStack.Length.ToString());
+					var win = Windows.GetOrCreate(actWin.Handle);
+					RaiseWindowActivated(win);
 				}
 
 			}
@@ -75,24 +77,34 @@ namespace SharpShell.Unix
 
 		public string GetPropertyString(string name)
 		{
+			using (var prop = Atom.Intern(name, false))
+				return GetPropertyString(prop);
+		}
+
+		public string GetPropertyString(Atom prop)
+		{
 			Atom propType;
 			int format;
 			int length;
 			byte[] data;
-			using (var prop = Atom.Intern(name, false))
-				if (Gdk.Property.Get(wnd, prop, null, 0, 4000, 0, out propType, out format, out length, out data)) {
-					return System.Text.Encoding.UTF8.GetString(data, 0, length);
-				}
+			if (Gdk.Property.Get(wnd, prop, null, 0, 4000, 0, out propType, out format, out length, out data)) {
+				return System.Text.Encoding.UTF8.GetString(data, 0, length);
+			}
 			return null;
 		}
 
 		//[DllImport("libX11", EntryPoint = "XGetWindowProperty")]
 		//public extern static int XGetWindowProperty(IntPtr display, IntPtr window, IntPtr atom, IntPtr long_offset, IntPtr long_length, bool delete, IntPtr req_type, out IntPtr actual_type, out int actual_format, out IntPtr nitems, out IntPtr bytes_after, out IntPtr prop);
 
-		public bool GetPropertyBinary2(string name, out int[] data)
+		public bool GetPropertyBinary(string name, out int[] data)
 		{
 			using (var prop = Atom.Intern(name, false))
-				return Gdk.Property.Get(wnd, prop, false, out data);
+				return GetPropertyBinary(prop, out data);
+		}
+
+		public bool GetPropertyBinary(Atom prop, out int[] data)
+		{
+			return Gdk.Property.Get(wnd, prop, false, out data);
 		}
 
 		public override string GetName()
@@ -109,10 +121,24 @@ namespace SharpShell.Unix
 			return GetPropertyString("_NET_WM_ICON");
 		}*/
 
+		private Atom _NET_WM_STATE = Atom.Intern("_NET_WM_STATE", false);
+		private Atom _NET_WM_STATE_SKIP_TASKBAR = Atom.Intern("_NET_WM_STATE_SKIP_TASKBAR", false);
+
+		public override bool ShowInTaskbar()
+		{
+			Atom[] data;
+			if (Property.Get(wnd, _NET_WM_STATE, false, out data)) {
+				for (var i = 0; i < data.Length; i++)
+					if (data[i].Handle == _NET_WM_STATE_SKIP_TASKBAR.Handle)
+						return false;
+			}
+			return true;
+		}
+
 		public override  Image GetIcon()
 		{
 			int[] data;
-			GetPropertyBinary2("_NET_WM_ICON", out data);
+			GetPropertyBinary("_NET_WM_ICON", out data);
 
 			if (data != null) {
 				int width = 1000;
