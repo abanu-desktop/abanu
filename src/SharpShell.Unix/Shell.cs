@@ -107,9 +107,11 @@ namespace SharpShell.Unix
 			return Gdk.Property.Get(wnd, prop, false, out data);
 		}
 
+		private Atom WM_ICON_NAME = Atom.Intern("WM_ICON_NAME", false);
+
 		public override string GetName()
 		{
-			var name = GetPropertyString("WM_ICON_NAME");
+			var name = GetPropertyString(WM_ICON_NAME);
 			if (name == null)
 				return "";
 			else
@@ -135,10 +137,12 @@ namespace SharpShell.Unix
 			return true;
 		}
 
+		private Atom _NET_WM_ICON = Atom.Intern("_NET_WM_ICON", false);
+
 		public override  Image GetIcon()
 		{
 			int[] data;
-			GetPropertyBinary("_NET_WM_ICON", out data);
+			GetPropertyBinary(_NET_WM_ICON, out data);
 
 			if (data != null) {
 				int width = 1000;
@@ -178,6 +182,11 @@ namespace SharpShell.Unix
 				//}
 			}
 			return null;
+		}
+
+		public override void Minimize()
+		{
+			wnd.Iconify();
 		}
 
 	}
