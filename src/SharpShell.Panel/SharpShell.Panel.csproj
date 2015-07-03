@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>PanelShell</RootNamespace>
+    <RootNamespace>SharpShell.Panel</RootNamespace>
     <AssemblyName>SharpShell</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -53,23 +53,23 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Desktop.cs" />
-    <Compile Include="Native.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="Hooks.cs" />
-    <Compile Include="Shell.cs" />
     <Compile Include="lib.cs" />
     <Compile Include="LogWindow.cs" />
-    <Compile Include="LauncherLib.cs" />
-    <Compile Include="INIFile.cs" />
     <Compile Include="LauncherMenu.cs" />
     <Compile Include="IconExtractor\IconExtractor.cs" />
     <Compile Include="IconExtractor\IconUtil.cs" />
     <Compile Include="IconExtractor\NativeMethods.cs" />
-    <Compile Include="Temp.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="IconExtractor\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpShell.Core\SharpShell.Core.csproj">
+      <Project>{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}</Project>
+      <Name>SharpShell.Core</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

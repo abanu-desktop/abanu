@@ -3,7 +3,9 @@ using Gtk;
 using Gdk;
 using System.Collections.Generic;
 
-namespace PanelShell
+using SharpShell.Core;
+
+namespace SharpShell.Panel
 {
 
 	public class TPlugin
@@ -102,7 +104,7 @@ namespace PanelShell
 
 				var bt = GetButton(wnd);
 				if (bt != null) {
-					AppLib.log("act");
+					LibCore.Log("act");
 					Application.Invoke((s, e) => {
 						foreach (var b in buthash2.Values) {
 							b.Active = bt == b;
@@ -164,7 +166,7 @@ namespace PanelShell
 
 		private void createButton(TWindow wnd)
 		{
-			AppLib.log(wnd.hwnd.ToString());
+			LibCore.Log(wnd.hwnd.ToString());
 
 			var b = new HBox();
 			b.Events = EventMask.AllEventsMask;

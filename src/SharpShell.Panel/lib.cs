@@ -1,20 +1,11 @@
 ﻿using System;
+using Gtk;
 
-namespace PanelShell
+namespace SharpShell.Panel
 {
 	public static class AppLib
 	{
 
-		public static void log(string text)
-		{
-			LogWindow.Current.AppendText(text);
-		}
-
-
-		public static void MessageBox(string text)
-		{
-			
-		}
 	}
 }
 

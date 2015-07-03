@@ -1,7 +1,9 @@
 ﻿using System;
 using Gtk;
 
-namespace PanelShell
+using SharpShell.Core;
+
+namespace SharpShell.Panel
 {
 	class MainClass
 	{
@@ -17,7 +19,7 @@ namespace PanelShell
 			try {
 				var logwin = new LogWindow();
 				logwin.Show();
-				AppLib.log("log started");
+				LibCore.Log("log started");
 				//Gtk.Settings.Default.ThemeName = "Dorian-3.16";
 				var shellMan = ShellManager.Create();
 				shellMan.UpdateWindows();
@@ -30,7 +32,7 @@ namespace PanelShell
 				pwin.Setup();
 				pwin.Show();
 			} catch (Exception ex) {
-				new MessageDialog(null, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, ex.ToString()).Show();
+				LibCore.MessageBox(ex.ToString());
 			}
 
 			Application.Run();

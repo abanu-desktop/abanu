@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
 
-namespace PanelShell
+namespace SharpShell.Core
 {
 	public abstract class ShellManager
 	{
@@ -64,7 +64,7 @@ namespace PanelShell
 		{
 			form = new SystemProcessHookForm();
 			form.WindowEvent += (s, e) => {
-				PanelShell.AppLib.log((string)e);
+				LibCore.Log((string)e);
 			};
 		}
 
@@ -210,7 +210,7 @@ namespace PanelShell
 
 		public override void BringToFront()
 		{
-			AppLib.log("BringToFront");
+			LibCore.Log("BringToFront");
 			//Interop.BringWindowToTop(hwnd);
 			Interop.ShowWindow(hwnd, Interop.SW_SHOW);	
 			if (Interop.IsIconic(hwnd))
@@ -229,7 +229,7 @@ namespace PanelShell
 
 		public void Log()
 		{
-			AppLib.log("HWND: " + hwnd.ToString() + ", Name: " + GetName());
+			LibCore.Log("HWND: " + hwnd.ToString() + ", Name: " + GetName());
 
 		}
 

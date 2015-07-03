@@ -3,9 +3,9 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace Testing
+namespace SharpShell.Core
 {
-	class TestGetLocalizedName
+	class GetLocalizedName
 	{
 		[DllImport("shell32.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Unicode)]
 		internal static extern int SHGetLocalizedName(string pszPath, StringBuilder pszResModule, ref int cch, out int pidsRes);

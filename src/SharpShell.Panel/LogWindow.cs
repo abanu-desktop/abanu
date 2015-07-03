@@ -2,7 +2,7 @@
 using Gtk;
 using Gdk;
 
-namespace PanelShell
+namespace SharpShell.Panel
 {
 	public class LogWindow : Gtk.Window
 	{

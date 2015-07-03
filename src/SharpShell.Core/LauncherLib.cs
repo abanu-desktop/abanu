@@ -8,13 +8,12 @@ using Lucene.Net.Analysis.Standard;
 using System.IO;
 using System.Collections.Generic;
 using Lucene.Net.Analysis;
-using Gtk;
 using Gdk;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
 
-namespace PanelShell
+namespace SharpShell.Core
 {
 
 	public class TLauncherIndex
@@ -37,7 +36,7 @@ namespace PanelShell
 			CreateCategories();
 		}
 
-		internal Dictionary<string, TLauncherCategory> catHash = new Dictionary<string, TLauncherCategory>();
+		public Dictionary<string, TLauncherCategory> catHash = new Dictionary<string, TLauncherCategory>();
 
 		public void CreateCategories()
 		{
@@ -188,7 +187,7 @@ namespace PanelShell
 				var entry = TLauncherEntry.CreateFromFile(file);
 				writer.AddDocument(entry.doc);
 			} catch (Exception ex) {
-				AppLib.log(ex.ToString());
+				LibCore.Log(ex.ToString());
 			}
 		}
 
@@ -225,7 +224,7 @@ namespace PanelShell
 				parser.AllowLeadingWildcard = true;
 				hits = reader.Search(parser.Parse(exp), 1000);
 			} catch (Exception ex) {
-				AppLib.log(ex.ToString());
+				LibCore.Log(ex.ToString());
 			}
 			if (hits != null)
 				for (var i = 0; i < hits.TotalHits; i++)
@@ -415,7 +414,7 @@ namespace PanelShell
 					else
 						return new Pixbuf(data);
 				} catch (Exception ex) {
-					AppLib.log(ex.ToString());
+					LibCore.Log(ex.ToString());
 				}
 				return null;
 			}
@@ -423,7 +422,7 @@ namespace PanelShell
 
 		public static TLauncherEntry CreateFromFile(string path)
 		{
-			AppLib.log("ADD LINK: " + path);
+			LibCore.Log("ADD LINK: " + path);
 			if (Path.GetExtension(path).ToLower() == ".lnk")
 				return CreateFromFileLnk(path);
 			else
@@ -463,7 +462,7 @@ namespace PanelShell
 				if (File.Exists(newCommand)) {
 					command = newCommand;
 				} else {
-					AppLib.log("COMMAND NOT FOUND: '" + command + "'");
+					LibCore.Log("COMMAND NOT FOUND: '" + command + "'");
 				}
 			}
 
@@ -502,7 +501,7 @@ namespace PanelShell
 				ico.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 				entry.IconStored = ms.ToArray();
 			} else {
-				AppLib.log("ICON LOCATION NOT FOUND: " + iconLocation);
+				LibCore.Log("ICON LOCATION NOT FOUND: " + iconLocation);
 			}
 
 			if (path.Contains("ANNO")) {
@@ -720,10 +719,10 @@ namespace PanelShell
 			var hresult = ((IShellLinkW)link).GetIconLocation(sb, sb.Capacity, out iconIndex);
 			iconLocation = sb.ToString(); 
 			if (hresult != 0) {
-				AppLib.log("GetIconLocation result: " + hresult);
+				LibCore.Log("GetIconLocation result: " + hresult);
 			}
 
-			name = Testing.TestGetLocalizedName.GetName(filename);
+			name = GetLocalizedName.GetName(filename);
 		}
 
 		#endregion

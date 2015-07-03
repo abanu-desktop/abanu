@@ -1,7 +1,7 @@
 ﻿using System;
 using Gtk;
 
-namespace PanelShell
+namespace SharpShell.Panel
 {
 	
 	public class DesktopWindow : Gtk.Window

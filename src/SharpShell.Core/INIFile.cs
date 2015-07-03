@@ -13,7 +13,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace PanelShell
+namespace SharpShell.Core
 {
 	public class INIFile
 	{
@@ -25,7 +25,7 @@ namespace PanelShell
 		// *** File name ***
 		private string m_FileName = null;
 
-		internal string FileName {
+		public string FileName {
 			get {
 				return m_FileName;
 			}
@@ -60,7 +60,7 @@ namespace PanelShell
 				Refresh();
 		}
 		// *** Read file contents into local cache ***
-		internal void Refresh()
+		public void Refresh()
 		{
 			lock (m_Lock) {
 				StreamReader sr = null;
@@ -119,7 +119,7 @@ namespace PanelShell
 			}
 		}
 		// *** Flush local cache content ***
-		internal void Flush()
+		public void Flush()
 		{
 			lock (m_Lock) {
 				// *** If local cache was not modified, exit ***
@@ -161,7 +161,7 @@ namespace PanelShell
 			}
 		}
 		// *** Read a value from local cache ***
-		internal string GetValue(string SectionName, string Key, string DefaultValue)
+		public string GetValue(string SectionName, string Key, string DefaultValue)
 		{
 			// *** Lazy loading ***
 			if (m_Lazy) {
@@ -185,7 +185,7 @@ namespace PanelShell
 			}
 		}
 		// *** Insert or modify a value in local cache ***
-		internal void SetValue(string SectionName, string Key, string Value)
+		public void SetValue(string SectionName, string Key, string Value)
 		{
 			// *** Lazy loading ***
 			if (m_Lazy) {
@@ -248,7 +248,7 @@ namespace PanelShell
 			return Result;
 		}
 		// *** Getters for various types ***
-		internal bool GetValue(string SectionName, string Key, bool DefaultValue)
+		public bool GetValue(string SectionName, string Key, bool DefaultValue)
 		{
 			string StringValue = GetValue(SectionName, Key, DefaultValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
 			int Value;
@@ -257,7 +257,7 @@ namespace PanelShell
 			return DefaultValue;
 		}
 
-		internal int GetValue(string SectionName, string Key, int DefaultValue)
+		public int GetValue(string SectionName, string Key, int DefaultValue)
 		{
 			string StringValue = GetValue(SectionName, Key, DefaultValue.ToString(CultureInfo.InvariantCulture));
 			int Value;
@@ -266,7 +266,7 @@ namespace PanelShell
 			return DefaultValue;
 		}
 
-		internal byte GetValue(string SectionName, string Key, byte DefaultValue)
+		public byte GetValue(string SectionName, string Key, byte DefaultValue)
 		{
 			string StringValue = GetValue(SectionName, Key, DefaultValue.ToString(CultureInfo.InvariantCulture));
 			byte Value;
@@ -275,7 +275,7 @@ namespace PanelShell
 			return DefaultValue;
 		}
 
-		internal double GetValue(string SectionName, string Key, double DefaultValue)
+		public double GetValue(string SectionName, string Key, double DefaultValue)
 		{
 			string StringValue = GetValue(SectionName, Key, DefaultValue.ToString(CultureInfo.InvariantCulture));
 			double Value;
@@ -284,7 +284,7 @@ namespace PanelShell
 			return DefaultValue;
 		}
 
-		internal byte[] GetValue(string SectionName, string Key, byte[] DefaultValue)
+		public byte[] GetValue(string SectionName, string Key, byte[] DefaultValue)
 		{
 			string StringValue = GetValue(SectionName, Key, EncodeByteArray(DefaultValue));
 			try {
@@ -294,27 +294,27 @@ namespace PanelShell
 			}
 		}
 		// *** Setters for various types ***
-		internal void SetValue(string SectionName, string Key, bool Value)
+		public void SetValue(string SectionName, string Key, bool Value)
 		{
 			SetValue(SectionName, Key, (Value) ? ("1") : ("0"));
 		}
 
-		internal void SetValue(string SectionName, string Key, int Value)
+		public void SetValue(string SectionName, string Key, int Value)
 		{
 			SetValue(SectionName, Key, Value.ToString(CultureInfo.InvariantCulture));
 		}
 
-		internal void SetValue(string SectionName, string Key, byte Value)
+		public void SetValue(string SectionName, string Key, byte Value)
 		{
 			SetValue(SectionName, Key, Value.ToString(CultureInfo.InvariantCulture));
 		}
 
-		internal void SetValue(string SectionName, string Key, double Value)
+		public void SetValue(string SectionName, string Key, double Value)
 		{
 			SetValue(SectionName, Key, Value.ToString(CultureInfo.InvariantCulture));
 		}
 
-		internal void SetValue(string SectionName, string Key, byte[] Value)
+		public void SetValue(string SectionName, string Key, byte[] Value)
 		{
 			SetValue(SectionName, Key, EncodeByteArray(Value));
 		}

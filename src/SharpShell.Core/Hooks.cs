@@ -181,7 +181,6 @@ namespace Microsoft.Win32
 
 		private  int filterFunc(int code, IntPtr wParam, IntPtr lParam)
 		{
-			Gtk.Application.Quit();
 
 			if (code < 0)
 				return CallNextHookEx(m_hhook, code, wParam, lParam);
@@ -189,10 +188,6 @@ namespace Microsoft.Win32
 			// we're gonna ignore peek messages
 //			if ( code == Win32.HC_ACTION )
 //				RaiseMouseHookEvent( wParam, CrackHookMsg( wParam, (Win32.MOUSEHOOKSTRUCT)Marshal.PtrToStructure( lParam, typeof( Win32.MOUSEHOOKSTRUCT ) ) ) );
-
-			if (code == Win32.HC_ACTION) {
-				Gtk.Application.Quit();
-			}
 
 			// Yield to the next hook in the chain
 			return CallNextHookEx(m_hhook, code, wParam, lParam);

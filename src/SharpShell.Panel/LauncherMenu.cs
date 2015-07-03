@@ -9,7 +9,9 @@ using Lucene.Net.Analysis;
 using Gtk;
 using Gdk;
 
-namespace PanelShell
+using SharpShell.Core;
+
+namespace SharpShell.Panel
 {
 	public class LauncherWidget : VBox
 	{
