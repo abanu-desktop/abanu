@@ -16,7 +16,7 @@ using System;
 using System.Runtime.InteropServices;
 using HWND = System.IntPtr;
 
-namespace Microsoft.Win32
+namespace SharpShell.Win32
 {
 	#region Class HookEventArgs
 	public class HookEventArgs : EventArgs

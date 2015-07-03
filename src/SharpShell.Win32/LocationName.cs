@@ -3,7 +3,7 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace SharpShell.Core
+namespace SharpShell.Win32
 {
 	class GetLocalizedName
 	{

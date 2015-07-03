@@ -37,8 +37,9 @@
     <Compile Include="Win32.cs" />
     <Compile Include="Shell.cs" />
     <Compile Include="Hooks.cs" />
-    <Compile Include="Temp.cs" />
     <Compile Include="Native.cs" />
+    <Compile Include="Link.cs" />
+    <Compile Include="LocationName.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
