@@ -24,7 +24,7 @@ namespace abanu.panel
 		public TasksPlugin(TPanel panel)
 			: base(panel)
 		{
-			widget = box = new TMyButtonList(Orientation.Horizontal);
+			box = new TMyButtonList(Orientation.Horizontal);
 			box.HeightRequest = panel.height;
 			Update();
 
@@ -147,6 +147,13 @@ namespace abanu.panel
 				//wnd.BringToFront();
 			};
 
+		}
+
+		private TMenuButtonHelper helper;
+
+		public override Widget CreateWidget()
+		{
+			return box;
 		}
 
 	}

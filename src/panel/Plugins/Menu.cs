@@ -16,7 +16,7 @@ namespace abanu.panel
 		public MenuPlugin(TPanel panel)
 			: base(panel)
 		{
-			widget = button = new ToggleButton();
+			button = new ToggleButton();
 			button.Add(new Label("Menu"));
 			button.Clicked += (s, e) => {
 				if (button.Active)
@@ -24,6 +24,11 @@ namespace abanu.panel
 				else
 					Close();
 			};
+		}
+
+		public override Widget CreateWidget()
+		{
+			return button;
 		}
 
 		private LauncherMenuWindow win;

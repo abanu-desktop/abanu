@@ -121,10 +121,10 @@ namespace abanu.panel
 			if (expand) {
 				var box2 = new Layout(new Adjustment(0, 0, 0, 0, 0, 0), new Adjustment(0, 0, 0, 0, 0, 0));
 
-				box2.Add(plug.widget);
+				box2.Add(plug.CreateWidget());
 				w = box2;
 			} else {
-				w = plug.widget;
+				w = plug.CreateWidget();
 			}
 
 			plugins.Add(plug);

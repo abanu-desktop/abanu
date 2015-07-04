@@ -15,7 +15,7 @@ namespace abanu.panel
 		public DatePlugin(TPanel panel)
 			: base(panel)
 		{
-			widget = button = new ToggleButton();
+			button = new ToggleButton();
 			button.Add(new Label("DateTime"));
 			/*			button.Clicked += (s, e) => {
 				if (button.Active)
@@ -23,6 +23,11 @@ namespace abanu.panel
 				else
 					Close();
 			};*/
+		}
+
+		public override Widget CreateWidget()
+		{
+			return button;
 		}
 
 		//private LauncherMenuWindow win;

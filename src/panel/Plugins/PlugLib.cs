@@ -8,16 +8,18 @@ using abanu.core;
 namespace abanu.panel
 {
 
-	public class TPlugin
+	public abstract class TPlugin
 	{
 
-		public Widget widget;
 		public TPanel panel;
+		public bool expand;
 
 		public TPlugin(TPanel panel)
 		{
 			this.panel = panel;
 		}
+
+		public abstract Widget CreateWidget();
 
 	}
 
@@ -47,6 +49,35 @@ namespace abanu.panel
 	public class TMyButton : ToggleButton
 	{
 		
+	}
+
+	public class TMenuButtonHelper
+	{
+		public TMenuButtonHelper(Orientation ori)
+		{
+			list = new TMyButtonList(ori);
+		}
+
+		public TMyButtonList list;
+
+		public void Add(TMyButton but)
+		{
+			list.Add(but);
+		}
+
+		public bool expand = true;
+
+		public Widget GetRoot()
+		{
+			if (expand) {
+				var box2 = new Layout(new Adjustment(0, 0, 0, 0, 0, 0), new Adjustment(0, 0, 0, 0, 0, 0));
+				box2.Add(list);
+				return box2;
+			} else {
+				return list;
+			}
+		}
+
 	}
 
 }
