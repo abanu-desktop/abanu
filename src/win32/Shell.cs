@@ -181,7 +181,7 @@ namespace abanu.win32
 			return IsAltTabWindow();
 		}
 
-		public override Image GetIcon()
+		public override Image GetIcon(Size size)
 		{
 			var ico = Interop.GetSmallWindowIcon(hwnd);
 			if (ico == null)

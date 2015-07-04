@@ -42,19 +42,6 @@ namespace abanu.panel
 
 		}
 
-		public class Row :  Box
-		{
-
-			public PanelButtonList buttonBox;
-
-			public Row(Orientation ori)
-				: base(ori, 0)
-			{
-				buttonBox = new PanelButtonList(ori);
-			}
-
-		}
-
 		#region IEnumerable implementation
 
 		public IEnumerator<PanelButton> GetEnumerator()
@@ -62,7 +49,23 @@ namespace abanu.panel
 			return buttons.GetEnumerator();
 		}
 
-		private Box rowBox;
+		private CustomBox rowBox;
+
+		public class CustomBox : Box
+		{
+			public CustomBox(Orientation ori)
+				: base(ori, 0)
+			{
+			}
+
+			protected override void OnGetPreferredWidth(out int minimum_width, out int natural_width)
+			{
+				base.OnGetPreferredWidth(out minimum_width, out natural_width);
+				minimum_width = 0;
+				natural_width = 0;
+			}
+
+		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
@@ -73,47 +76,71 @@ namespace abanu.panel
 
 		public PanelButtonContainer(Orientation ori)
 		{
-			buttonBox = new PanelButtonList(ori);
-			rowBox = new Row(ori);
+			rowBox = new CustomBox(ori == Orientation.Vertical ? Orientation.Horizontal : Orientation.Vertical);
+			for (var i = 0; i < rowsCount; i++) {
+				var row = new PanelButtonList(ori);
+				rows.Add(row);
+				rowBox.Add(row);
+			}
+
+			rowBox.SizeAllocated += (s, e) => {
+				alloc = e.Allocation;
+			};
+
+
+		}
+
+		private Rectangle alloc;
+
+		public void updateSize()
+		{
 		}
 
 		public int rowHeight = -1;
-		public int rows = 1;
-
-		private PanelButtonList buttonBox;
+		public int rowsCount = 1;
+		private List<PanelButtonList> rows = new List<PanelButtonList>();
 
 		public List<PanelButton> buttons = new List<PanelButton>();
 
 		public void Add(PanelButton bt)
 		{
 			buttons.Add(bt);
-			buttonBox.Add(bt);
 			UpdateButtons(); //TODO: async queue
 		}
 
 		public void Remove(PanelButton bt)
 		{
 			buttons.Remove(bt);
-			buttonBox.Add(bt);
 			UpdateButtons();
 		}
 
 		private void UpdateButtons()
 		{
-			
+			foreach (var row in rows) {
+				foreach (PanelButton bt in row) {
+					row.Remove(bt);
+				}
+			}
+
+			foreach (var bt in buttons) {
+				rows[0].Add(bt);
+			}
+
 		}
 
 		public bool expand = true;
 
 		public Widget GetRoot()
 		{
-			if (expand) {
+/*			if (expand) {
 				var box2 = new Layout(new Adjustment(0, 0, 0, 0, 0, 0), new Adjustment(0, 0, 0, 0, 0, 0));
-				box2.Add(buttonBox);
+				box2.Add(rowBox);
 				return box2;
 			} else {
-				return buttonBox;
-			}
+				return rowBox;
+			}*/
+
+			return rowBox;
 		}
 
 	}
