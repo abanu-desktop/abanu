@@ -23,6 +23,11 @@ namespace abanu.panel
 				else
 					Close();
 			};*/
+
+
+			button.Clicked += (s, e) => {
+				CoreLib.Signal("test");
+			};
 		}
 
 		public override Widget CreateWidget()

@@ -12,6 +12,14 @@ namespace abanu.core
 				OnLog(txt);
 		}
 
+		public static event Action<string, object[]> OnSignal;
+
+		public static void Signal(string path, params object[] args)
+		{
+			if (OnSignal != null)
+				OnSignal(path, args);
+		}
+
 		public static event Action<string> OnLog;
 
 		public static void MessageBox(string text)

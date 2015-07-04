@@ -16,11 +16,10 @@ namespace abanu.panel
 			//var dwin = new DesktopWindow();
 			//dwin.Show();
 
-			//GLib.ExceptionManager.UnhandledException
-			GLib.ExceptionManager.UnhandledException += (e) => {
+			/*GLib.ExceptionManager.UnhandledException += (e) => {
 				e.ExitApplication = false;
 				CoreLib.Log(e.ExceptionObject.ToString());
-			};
+			};*/
 
 			try {
 				var logwin = new LogWindow();

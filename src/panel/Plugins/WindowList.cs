@@ -87,9 +87,9 @@ namespace abanu.panel
 			public TWindowButton(TWindow wnd)
 			{
 				this.wnd = wnd;
-				Events = EventMask.AllEventsMask;
 			}
 
+			/*
 			protected override void OnToggled()
 			{
 				base.OnToggled();
@@ -103,6 +103,7 @@ namespace abanu.panel
 					wnd.BringToFront();
 				return false;
 			}
+*/
 
 		}
 
@@ -111,9 +112,34 @@ namespace abanu.panel
 			CoreLib.Log(wnd.hwnd.ToString());
 
 			var b = new HBox();
+			b.Show();
 			b.Events = EventMask.AllEventsMask;
 
 			var but = new TWindowButton(wnd);
+			//but.Add(b);
+
+			var img = wnd.GetIcon(new Size(22, 22));
+			if (img != null) {
+				but.Image = img;
+				img.Show();
+			}
+
+			but.Label = wnd.GetName();
+			buttonContainer.Add(but);
+
+			/*
+			var lab = new Label("hhhhhhhhhhhhhhhhhhhhhhhhh");
+			lab.Ellipsize = Pango.EllipsizeMode.End;
+			lab.Halign = Align.Start;
+			//lab.WidthRequest = 100 - 22;
+			lab.Show();
+			but.Add(lab);
+			but.WidthRequest = 100;
+			but.Show();
+			buttonContainer.Add(but);
+*/
+
+			/*
 			but.Add(b);
 			buttonContainer.Add(but);
 
@@ -122,6 +148,7 @@ namespace abanu.panel
 				img.Events = EventMask.AllEventsMask;
 				//but.Image = img;
 				b.Add(img);
+				b.Expand = false;
 			}
 
 			var lab = new Label();
@@ -129,17 +156,18 @@ namespace abanu.panel
 			lab.Text = wnd.GetName();
 			lab.Events = EventMask.AllEventsMask;
 
-			lab.WidthRequest = 100;
+			//lab.WidthRequest = 100;
 
 			b.Add(lab);
+*/
 
 			b.ShowAll();
 
 			buthash2.Add(wnd, but);
 
-			but.Clicked += (s, e) => {
-				//wnd.BringToFront();
-			};
+			//but.Clicked += (s, e) => {
+			//wnd.BringToFront();
+			//};
 
 		}
 
