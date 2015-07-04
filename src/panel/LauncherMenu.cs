@@ -9,9 +9,9 @@ using Lucene.Net.Analysis;
 using Gtk;
 using Gdk;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Panel
+namespace abanu.panel
 {
 	public class LauncherWidget : VBox
 	{

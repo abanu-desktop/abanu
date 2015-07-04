@@ -3,7 +3,7 @@ using Gtk;
 using Gdk;
 using System.Collections.Generic;
 
-namespace SharpShell.Panel
+namespace abanu.panel
 {
 	
 	public class PanelWindow : Gtk.Window

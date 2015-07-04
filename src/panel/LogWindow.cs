@@ -2,9 +2,9 @@
 using Gtk;
 using Gdk;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Panel
+namespace abanu.panel
 {
 	public class LogWindow : Gtk.Window
 	{

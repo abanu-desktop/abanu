@@ -4,9 +4,9 @@ using Gdk;
 using Gtk;
 using System.Runtime.InteropServices;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Unix
+namespace abanu.unix
 {
 
 	public class ShellManagerUnix : ShellManager

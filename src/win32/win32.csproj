@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{791CA77A-3D53-4183-A6D8-357AC512CBE8}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SharpShell.Win32</RootNamespace>
-    <AssemblyName>SharpShell.Win32</AssemblyName>
+    <RootNamespace>abanu.win32</RootNamespace>
+    <AssemblyName>abanu.win32</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Xml.Linq;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Win32
+namespace abanu.win32
 {
 
 	public static class LinkReaderWin32

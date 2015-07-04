@@ -1,9 +1,9 @@
 ﻿using System;
 using Gtk;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Panel
+namespace abanu.panel
 {
 	class MainClass
 	{

@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Win32
+namespace abanu.win32
 {
 
-	public class FactoryActivator : SharpShell.Core.FactoryActivator
+	public class FactoryActivator : abanu.core.FactoryActivator
 	{
 		public override ShellManager CreateShellManager()
 		{

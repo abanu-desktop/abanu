@@ -4,11 +4,11 @@ using Gdk;
 using Gtk;
 using System.Runtime.InteropServices;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Unix
+namespace abanu.unix
 {
-	public class FactoryActivator : SharpShell.Core.FactoryActivator
+	public class FactoryActivator : abanu.core.FactoryActivator
 	{
 		
 		public override ShellManager CreateShellManager()

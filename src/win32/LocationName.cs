@@ -3,7 +3,7 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace SharpShell.Win32
+namespace abanu.win32
 {
 	class GetLocalizedName
 	{

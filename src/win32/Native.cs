@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace SharpShell.Win32
+namespace abanu.win32
 {
 
 	public sealed class NativeMethods

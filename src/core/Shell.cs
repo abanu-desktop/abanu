@@ -9,7 +9,7 @@ using System.IO;
 using Gdk;
 using Gtk;
 
-namespace SharpShell.Core
+namespace abanu.core
 {
 	public abstract class ShellManager
 	{

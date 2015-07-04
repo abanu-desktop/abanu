@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
 
-namespace SharpShell.Core
+namespace abanu.core
 {
 
 	public class TLauncherIndex

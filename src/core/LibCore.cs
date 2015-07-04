@@ -1,7 +1,7 @@
 ﻿using System;
 using Gtk;
 
-namespace SharpShell.Core
+namespace abanu.core
 {
 	public static class CoreLib
 	{
@@ -41,8 +41,8 @@ namespace SharpShell.Core
 
 		static Factory()
 		{
-			Win32 = Load("Win32");
-			Unix = Load("Unix");
+			Win32 = Load("win32");
+			Unix = Load("unix");
 
 			if (CoreLib.IsWin32)
 				Current = Win32;
@@ -52,8 +52,8 @@ namespace SharpShell.Core
 
 		private static FactoryActivator Load(string platform)
 		{
-			var asm = System.Reflection.Assembly.LoadFrom("SharpShell." + platform + ".dll");
-			var t = asm.GetType("SharpShell." + platform + ".FactoryActivator");
+			var asm = System.Reflection.Assembly.LoadFrom("abanu." + platform + ".dll");
+			var t = asm.GetType("abanu." + platform + ".FactoryActivator");
 			return (FactoryActivator)Activator.CreateInstance(t);
 		}
 

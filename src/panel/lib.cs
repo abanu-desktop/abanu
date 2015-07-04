@@ -1,7 +1,7 @@
 ﻿using System;
 using Gtk;
 
-namespace SharpShell.Panel
+namespace abanu.panel
 {
 	public static class AppLib
 	{

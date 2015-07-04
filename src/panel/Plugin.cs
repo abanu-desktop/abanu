@@ -3,9 +3,9 @@ using Gtk;
 using Gdk;
 using System.Collections.Generic;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Panel
+namespace abanu.panel
 {
 
 	public class TPlugin

@@ -9,9 +9,9 @@ using System.IO;
 using Gdk;
 using Gtk;
 
-using SharpShell.Core;
+using abanu.core;
 
-namespace SharpShell.Win32
+namespace abanu.win32
 {
 
 	public class ShellManagerWin32 : ShellManager
