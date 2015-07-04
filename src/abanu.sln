@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell.Panel", "SharpShell.Panel\SharpShell.Panel.csproj", "{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "panel", "panel\panel.csproj", "{0D21CFAF-BDFA-4E92-9211-BEA4BE6317B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell.Win32", "SharpShell.Win32\SharpShell.Win32.csproj", "{791CA77A-3D53-4183-A6D8-357AC512CBE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "win32", "win32\win32.csproj", "{791CA77A-3D53-4183-A6D8-357AC512CBE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell.Unix", "SharpShell.Unix\SharpShell.Unix.csproj", "{4257F2E8-9071-4043-979C-37F316B4F91C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unix", "unix\unix.csproj", "{4257F2E8-9071-4043-979C-37F316B4F91C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpShell.Core", "SharpShell.Core\SharpShell.Core.csproj", "{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

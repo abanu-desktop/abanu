@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{791CA77A-3D53-4183-A6D8-357AC512CBE8}</ProjectGuid>
+    <ProjectGuid>{4257F2E8-9071-4043-979C-37F316B4F91C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SharpShell.Win32</RootNamespace>
-    <AssemblyName>SharpShell.Win32</AssemblyName>
+    <RootNamespace>SharpShell.Unix</RootNamespace>
+    <AssemblyName>SharpShell.Unix</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,30 +29,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
+    <Reference Include="glib-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="gdk-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gtk-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="gio-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="atk-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="glib-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gtk-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Win32.cs" />
+    <Compile Include="X11.cs" />
     <Compile Include="Shell.cs" />
-    <Compile Include="Hooks.cs" />
-    <Compile Include="Native.cs" />
-    <Compile Include="Link.cs" />
-    <Compile Include="LocationName.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\SharpShell.Core\SharpShell.Core.csproj">
+    <ProjectReference Include="..\core\core.csproj">
       <Project>{ED536A8B-DD0B-423B-9C9D-8FAC6C0664D0}</Project>
-      <Name>SharpShell.Core</Name>
+      <Name>core</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
