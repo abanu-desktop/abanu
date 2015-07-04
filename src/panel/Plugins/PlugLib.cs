@@ -23,16 +23,10 @@ namespace abanu.panel
 
 	}
 
-	public class cnt : Bin
-	{
-		
-
-	}
-
-	public class TMyButtonList :  Box
+	public class PanelButtonList :  Box
 	{
 
-		public TMyButtonList(Orientation ori)
+		public PanelButtonList(Orientation ori)
 			: base(ori, 0)
 		{
 			Orientation = ori;
@@ -46,21 +40,21 @@ namespace abanu.panel
 
 	}
 
-	public class TMyButton : ToggleButton
+	public class PanelButton : ToggleButton
 	{
 		
 	}
 
-	public class TMenuButtonHelper
+	public class PanelButtonContainer
 	{
-		public TMenuButtonHelper(Orientation ori)
+		public PanelButtonContainer(Orientation ori)
 		{
-			list = new TMyButtonList(ori);
+			list = new PanelButtonList(ori);
 		}
 
-		public TMyButtonList list;
+		public PanelButtonList list;
 
-		public void Add(TMyButton but)
+		public void Add(PanelButton but)
 		{
 			list.Add(but);
 		}

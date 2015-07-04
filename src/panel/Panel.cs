@@ -118,14 +118,15 @@ namespace abanu.panel
 		public void AddPlugin(TPlugin plug, bool expand = false, bool last = false)
 		{
 			Widget w;
-			if (expand) {
+			/*if (expand) {
 				var box2 = new Layout(new Adjustment(0, 0, 0, 0, 0, 0), new Adjustment(0, 0, 0, 0, 0, 0));
 
 				box2.Add(plug.CreateWidget());
 				w = box2;
 			} else {
 				w = plug.CreateWidget();
-			}
+			}*/
+			w = plug.CreateWidget();
 
 			plugins.Add(plug);
 			if (last)

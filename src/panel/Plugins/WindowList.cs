@@ -11,7 +11,7 @@ namespace abanu.panel
 	public class TasksPlugin : TPlugin
 	{
 
-		private TMyButtonList box;
+		private PanelButtonContainer helper;
 		private Dictionary<TWindow, TWindowButton> buthash2 = new Dictionary<TWindow, TWindowButton>();
 
 		public TWindowButton GetButton(TWindow wnd)
@@ -24,8 +24,8 @@ namespace abanu.panel
 		public TasksPlugin(TPanel panel)
 			: base(panel)
 		{
-			box = new TMyButtonList(Orientation.Horizontal);
-			box.HeightRequest = panel.height;
+			helper = new PanelButtonContainer(Orientation.Horizontal);
+			//box.HeightRequest = panel.height;
 			Update();
 
 			ShellManager.Current.WindowActivated += (wnd) => {
@@ -46,7 +46,7 @@ namespace abanu.panel
 				var bt = GetButton(wnd);
 				if (bt != null) {
 					buthash2.Remove(wnd);
-					box.Remove(bt);
+					helper.list.Remove(bt);
 					bt.Dispose();
 				}
 			};
@@ -55,8 +55,8 @@ namespace abanu.panel
 					createButton(wnd);
 			};
 
-			box.SizeAllocated += (s, e) => 
-				OnSizeAllocated(e);
+			//box.SizeAllocated += (s, e) => 
+			//	OnSizeAllocated(e);
 		}
 
 		private void OnSizeAllocated(SizeAllocatedArgs args)
@@ -66,8 +66,8 @@ namespace abanu.panel
 
 		public void Update()
 		{
-			foreach (Widget child in box) {
-				box.Remove(child);
+			foreach (Widget child in helper.list) {
+				helper.list.Remove(child);
 				child.Dispose();
 			}
 
@@ -79,7 +79,7 @@ namespace abanu.panel
 
 		}
 
-		public class TWindowButton : TMyButton
+		public class TWindowButton : PanelButton
 		{
 
 			public TWindow wnd;
@@ -133,7 +133,7 @@ namespace abanu.panel
 			//but.IconName = "search";
 			//but.SetSizeRequest(100, 50);
 			but.WidthRequest = 100;
-			box.Add(but);
+			helper.list.Add(but);
 
 			//b.Add(lab);
 
@@ -149,11 +149,9 @@ namespace abanu.panel
 
 		}
 
-		private TMenuButtonHelper helper;
-
 		public override Widget CreateWidget()
 		{
-			return box;
+			return helper.GetRoot();
 		}
 
 	}
