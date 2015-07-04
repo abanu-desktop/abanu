@@ -110,34 +110,28 @@ namespace abanu.panel
 		{
 			CoreLib.Log(wnd.hwnd.ToString());
 
-			var but = new  TWindowButton(wnd);
-
 			var b = new HBox();
+			b.Events = EventMask.AllEventsMask;
+
+			var but = new TWindowButton(wnd);
+			but.Add(b);
+			helper.list.Add(but);
 
 			var img = wnd.GetIcon(new Size(22, 22));
 			if (img != null) {
-				b.PackStart(img, true, true, 0);
+				img.Events = EventMask.AllEventsMask;
+				//but.Image = img;
+				b.Add(img);
 			}
 
-			var l = new Label(wnd.GetName());
-			l.Ellipsize = Pango.EllipsizeMode.End;
-			b.PackStart(l, true, true, 0);
-			l.Justify = Justification.Left;
+			var lab = new Label();
+			lab.Ellipsize = Pango.EllipsizeMode.End;
+			lab.Text = wnd.GetName();
+			lab.Events = EventMask.AllEventsMask;
 
-			//but.LabelWidget = b;
-			but.Label = "dddd";
+			lab.WidthRequest = 100;
 
-
-			//but.Label = "ssssssssssssssssssssssssssssss";
-			//but.IconName = "search";
-			//but.IconName = "search";
-			//but.SetSizeRequest(100, 50);
-			but.WidthRequest = 100;
-			helper.list.Add(but);
-
-			//b.Add(lab);
-
-			//but.SetSizeRequest(150, box.HeightRequest);
+			b.Add(lab);
 
 			b.ShowAll();
 
