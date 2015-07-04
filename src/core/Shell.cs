@@ -94,7 +94,7 @@ namespace abanu.core
 			return true;
 		}
 
-		public virtual Image GetIcon()
+		public virtual Image GetIcon(Size size)
 		{
 			return null;
 		}

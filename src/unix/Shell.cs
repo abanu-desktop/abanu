@@ -139,7 +139,7 @@ namespace abanu.unix
 
 		private Atom _NET_WM_ICON = Atom.Intern("_NET_WM_ICON", false);
 
-		public override  Image GetIcon()
+		public override  Image GetIcon(Size size)
 		{
 			int[] data;
 			GetPropertyBinary(_NET_WM_ICON, out data);
@@ -177,6 +177,7 @@ namespace abanu.unix
 				}
 
 				var pbuf = new Pixbuf(byteArray2, Colorspace.Rgb, true, 8, width, height, width * 4);
+				pbuf = pbuf.ScaleSimple(size.Width, size.Height, InterpType.Bilinear);
 				return new Image(pbuf);
 				//} catch (Exception ex) {
 				//}

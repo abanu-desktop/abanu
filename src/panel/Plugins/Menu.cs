@@ -13,7 +13,8 @@ namespace abanu.panel
 
 		private ToggleButton button;
 
-		public MenuPlugin()
+		public MenuPlugin(TPanel panel)
+			: base(panel)
 		{
 			widget = button = new ToggleButton();
 			button.Add(new Label("Menu"));

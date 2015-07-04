@@ -11,19 +11,21 @@ namespace abanu.panel
 	public class TasksPlugin : TPlugin
 	{
 
-		private Box box;
-		private Dictionary<TWindow, ToggleButton2> buthash2 = new Dictionary<TWindow, ToggleButton2>();
+		private TMyButtonList box;
+		private Dictionary<TWindow, TWindowButton> buthash2 = new Dictionary<TWindow, TWindowButton>();
 
-		public ToggleButton2 GetButton(TWindow wnd)
+		public TWindowButton GetButton(TWindow wnd)
 		{
-			ToggleButton2 bt = null;
+			TWindowButton bt = null;
 			buthash2.TryGetValue(wnd, out bt);
 			return bt;
 		}
 
-		public TasksPlugin()
+		public TasksPlugin(TPanel panel)
+			: base(panel)
 		{
-			widget = box = new Box(Orientation.Horizontal, 0);
+			widget = box = new TMyButtonList(Orientation.Horizontal);
+			box.HeightRequest = panel.height;
 			Update();
 
 			ShellManager.Current.WindowActivated += (wnd) => {
@@ -52,6 +54,14 @@ namespace abanu.panel
 				if (wnd.ShowInTaskbar())
 					createButton(wnd);
 			};
+
+			box.SizeAllocated += (s, e) => 
+				OnSizeAllocated(e);
+		}
+
+		private void OnSizeAllocated(SizeAllocatedArgs args)
+		{
+
 		}
 
 		public void Update()
@@ -69,15 +79,20 @@ namespace abanu.panel
 
 		}
 
-		public class ToggleButton2 : ToggleButton
+		public class TWindowButton : TMyButton
 		{
 
 			public TWindow wnd;
 
-			public ToggleButton2(TWindow wnd)
+			public TWindowButton(TWindow wnd)
 			{
 				this.wnd = wnd;
 				Events = EventMask.AllEventsMask;
+			}
+
+			protected override void OnToggled()
+			{
+				base.OnToggled();
 			}
 
 			protected override bool OnButtonPressEvent(EventButton evnt)
@@ -95,31 +110,33 @@ namespace abanu.panel
 		{
 			CoreLib.Log(wnd.hwnd.ToString());
 
+			var but = new  TWindowButton(wnd);
+
 			var b = new HBox();
-			b.Events = EventMask.AllEventsMask;
 
-			var but = new ToggleButton2(wnd);
-			but.Add(b);
-			box.Add(but);
-
-			var img = wnd.GetIcon();
+			var img = wnd.GetIcon(new Size(22, 22));
 			if (img != null) {
-				img.Events = EventMask.AllEventsMask;
-				//but.Image = img;
-				b.Add(img);
+				b.PackStart(img, true, true, 0);
 			}
 
-			//but.Label = wnd.GetName();
-			//AppLib.log(but.Children.Length.ToString());
+			var l = new Label(wnd.GetName());
+			l.Ellipsize = Pango.EllipsizeMode.End;
+			b.PackStart(l, true, true, 0);
+			l.Justify = Justification.Left;
 
-			var lab = new Label();
-			lab.Ellipsize = Pango.EllipsizeMode.End;
-			lab.MaxWidthChars = 20;
-			lab.WidthChars = 20;
-			lab.Text = wnd.GetName();
-			lab.Events = EventMask.AllEventsMask;
+			//but.LabelWidget = b;
+			but.Label = "dddd";
 
-			b.Add(lab);
+
+			//but.Label = "ssssssssssssssssssssssssssssss";
+			//but.IconName = "search";
+			//but.IconName = "search";
+			//but.SetSizeRequest(100, 50);
+			but.WidthRequest = 100;
+			box.Add(but);
+
+			//b.Add(lab);
+
 			//but.SetSizeRequest(150, box.HeightRequest);
 
 			b.ShowAll();

@@ -12,7 +12,8 @@ namespace abanu.panel
 
 		private ToggleButton button;
 
-		public DatePlugin()
+		public DatePlugin(TPanel panel)
+			: base(panel)
 		{
 			widget = button = new ToggleButton();
 			button.Add(new Label("DateTime"));

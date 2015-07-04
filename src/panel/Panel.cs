@@ -37,11 +37,11 @@ namespace abanu.panel
 			SetOrientation(Orientation.Horizontal);
 			SetPos(0, new Point(0, 0), 30, 1, 100.0, EDock.Top);
 
-			TPlugin plug = new MenuPlugin();
+			TPlugin plug = new MenuPlugin(this);
 			AddPlugin(plug);
-			plug = new TasksPlugin();
+			plug = new TasksPlugin(this);
 			AddPlugin(plug, true);
-			plug = new DatePlugin();
+			plug = new DatePlugin(this);
 			AddPlugin(plug, false, true);
 		}
 
@@ -53,10 +53,15 @@ namespace abanu.panel
 		public int panelSize;
 
 		public int monitorIdx;
+		public int rowHeight;
+		public int rows;
+
 
 		public void SetPos(int monitorIdx, Point pos, int rowHeight, int rows, double widthPercent, EDock dock)
 		{
-
+			
+			this.rows = rows;
+			this.rowHeight = rowHeight;
 			panelSize = rowHeight * rows;
 			height = panelSize;
 			var mon = Screen.Default.GetMonitorGeometry(monitorIdx);
