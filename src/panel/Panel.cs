@@ -10,9 +10,12 @@ namespace abanu.panel
 	{
 		
 		public PanelWindow()
-			: base(Gtk.WindowType.Popup)
+			: base(Gtk.WindowType.Toplevel)
 		{
-			Decorated = false;
+			//Decorated = false;
+			//this.Resizable = false;
+			//this.SetDefaultSize(300, 300);
+			//this.SetGeometryHints(this, new Geometry(){ MaxWidth = 300 }, WindowHints.MaxSize);
 		}
 
 	}
@@ -37,7 +40,9 @@ namespace abanu.panel
 			TPlugin plug = new MenuPlugin();
 			AddPlugin(plug);
 			plug = new TasksPlugin();
-			AddPlugin(plug);
+			AddPlugin(plug, true);
+			plug = new DatePlugin();
+			AddPlugin(plug, false, true);
 		}
 
 		public void SetOrientation(Orientation ori)
@@ -64,7 +69,7 @@ namespace abanu.panel
 			width = (int)(((double)mon.Width / 100) * widthPercent);
 
 			win.Move(pos.X, pos.Y);
-			win.SetSizeRequest(width, height);
+			win.SetDefaultSize(width, height);
 		}
 
 		public int width;
@@ -78,6 +83,11 @@ namespace abanu.panel
 			quitItem.ButtonPressEvent += (s, e) => {
 				Application.Quit();
 			};
+
+			//win.Add(box2);
+
+			//box2.SetSizeRequest(300, 300);
+
 
 			box = new Box(Orientation.Vertical, 1);
 			win.Add(box);
@@ -100,10 +110,23 @@ namespace abanu.panel
 			win.ShowAll();
 		}
 
-		public void AddPlugin(TPlugin plug)
+		public void AddPlugin(TPlugin plug, bool expand = false, bool last = false)
 		{
+			Widget w;
+			if (expand) {
+				var box2 = new Layout(new Adjustment(0, 0, 0, 0, 0, 0), new Adjustment(0, 0, 0, 0, 0, 0));
+
+				box2.Add(plug.widget);
+				w = box2;
+			} else {
+				w = plug.widget;
+			}
+
 			plugins.Add(plug);
-			box.Add(plug.widget);
+			if (last)
+				box.PackEnd(w, expand, expand, 0);
+			else
+				box.PackStart(w, expand, expand, 0);
 		}
 
 		public TPluginList plugins = new TPluginList();
