@@ -11,7 +11,7 @@ namespace abanu.panel
 	public class TasksPlugin : TPlugin
 	{
 
-		private PanelButtonContainer helper;
+		private PanelButtonContainer buttonContainer;
 		private Dictionary<TWindow, TWindowButton> buthash2 = new Dictionary<TWindow, TWindowButton>();
 
 		public TWindowButton GetButton(TWindow wnd)
@@ -24,7 +24,7 @@ namespace abanu.panel
 		public TasksPlugin(TPanel panel)
 			: base(panel)
 		{
-			helper = new PanelButtonContainer(Orientation.Horizontal);
+			buttonContainer = new PanelButtonContainer(Orientation.Horizontal);
 			//box.HeightRequest = panel.height;
 			Update();
 
@@ -46,7 +46,7 @@ namespace abanu.panel
 				var bt = GetButton(wnd);
 				if (bt != null) {
 					buthash2.Remove(wnd);
-					helper.list.Remove(bt);
+					buttonContainer.Remove(bt);
 					bt.Dispose();
 				}
 			};
@@ -66,8 +66,8 @@ namespace abanu.panel
 
 		public void Update()
 		{
-			foreach (Widget child in helper.list) {
-				helper.list.Remove(child);
+			foreach (var child in buttonContainer) {
+				buttonContainer.Remove(child);
 				child.Dispose();
 			}
 
@@ -115,7 +115,7 @@ namespace abanu.panel
 
 			var but = new TWindowButton(wnd);
 			but.Add(b);
-			helper.list.Add(but);
+			buttonContainer.Add(but);
 
 			var img = wnd.GetIcon(new Size(22, 22));
 			if (img != null) {
@@ -145,7 +145,7 @@ namespace abanu.panel
 
 		public override Widget CreateWidget()
 		{
-			return helper.GetRoot();
+			return buttonContainer.GetRoot();
 		}
 
 	}

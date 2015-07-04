@@ -1,6 +1,7 @@
 ﻿using System;
 using Gtk;
 using Gdk;
+using System.Collections;
 using System.Collections.Generic;
 
 using abanu.core;
@@ -23,40 +24,83 @@ namespace abanu.panel
 
 	}
 
-	public class PanelButtonList :  Box
-	{
-
-		public PanelButtonList(Orientation ori)
-			: base(ori, 0)
-		{
-			Orientation = ori;
-			this.Margin = 0;
-			this.BorderWidth = 0;
-			//var css = new CssProvider();
-			//css.LoadFromPath("../res/style/main.css");
-			//StyleContext.AddProvider(css, uint.MaxValue);
-			//this.ToolbarStyle = ToolbarStyle.BothHoriz;
-		}
-
-	}
-
 	public class PanelButton : ToggleButton
 	{
 		
 	}
 
-	public class PanelButtonContainer
+	public class PanelButtonContainer : IEnumerable<PanelButton>
 	{
-		public PanelButtonContainer(Orientation ori)
+
+		public class PanelButtonList :  Box
 		{
-			list = new PanelButtonList(ori);
+
+			public PanelButtonList(Orientation ori)
+				: base(ori, 0)
+			{
+			}
+
 		}
 
-		public PanelButtonList list;
-
-		public void Add(PanelButton but)
+		public class Row :  Box
 		{
-			list.Add(but);
+
+			public PanelButtonList buttonBox;
+
+			public Row(Orientation ori)
+				: base(ori, 0)
+			{
+				buttonBox = new PanelButtonList(ori);
+			}
+
+		}
+
+		#region IEnumerable implementation
+
+		public IEnumerator<PanelButton> GetEnumerator()
+		{
+			return buttons.GetEnumerator();
+		}
+
+		private Box rowBox;
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return buttons.GetEnumerator();
+		}
+
+		#endregion
+
+		public PanelButtonContainer(Orientation ori)
+		{
+			buttonBox = new PanelButtonList(ori);
+			rowBox = new Row(ori);
+		}
+
+		public int rowHeight = -1;
+		public int rows = 1;
+
+		private PanelButtonList buttonBox;
+
+		public List<PanelButton> buttons = new List<PanelButton>();
+
+		public void Add(PanelButton bt)
+		{
+			buttons.Add(bt);
+			buttonBox.Add(bt);
+			UpdateButtons(); //TODO: async queue
+		}
+
+		public void Remove(PanelButton bt)
+		{
+			buttons.Remove(bt);
+			buttonBox.Add(bt);
+			UpdateButtons();
+		}
+
+		private void UpdateButtons()
+		{
+			
 		}
 
 		public bool expand = true;
@@ -65,10 +109,10 @@ namespace abanu.panel
 		{
 			if (expand) {
 				var box2 = new Layout(new Adjustment(0, 0, 0, 0, 0, 0), new Adjustment(0, 0, 0, 0, 0, 0));
-				box2.Add(list);
+				box2.Add(buttonBox);
 				return box2;
 			} else {
-				return list;
+				return buttonBox;
 			}
 		}
 
