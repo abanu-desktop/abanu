@@ -1,6 +1,6 @@
 *Abanu Desktop is a Desktop Environment for Windows and Linux. It's extremly fast.*
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/abanu-desktop/abanu?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter Chat][gitter-image]][gitter-chat]
 
 ## Abanu Desktop contains the following applications:
 * Abanu Panels (Application Menu, Window List, Clock, configurable size & position) [implemented]
