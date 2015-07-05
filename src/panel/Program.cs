@@ -27,7 +27,7 @@ namespace abanu.panel
 				if (args.Length > 0) {
 					if (args[0] == "--kill" || args[0] == "--replace") {
 						var currProcess = Process.GetCurrentProcess();
-						foreach (var process in System.Diagnostics.Process.GetProcessesByName("abanu.panel.exe"))
+						foreach (var process in System.Diagnostics.Process.GetProcessesByName("abanu.panel"))
 							if (process.Id != currProcess.Id)
 								process.Kill();
 						
