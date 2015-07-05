@@ -30,3 +30,6 @@ In the moment, only the Abanu Panel is working, but still in development.
 
 Contact:
 sebastian.loncar [at] gmail.com
+
+
+[![Issues][github-issues]][github-issues-link]
