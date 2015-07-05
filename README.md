@@ -11,7 +11,7 @@
 * Alternative for the Windows Shell ("explorer.exe") and runs side by side. On Linux, an existing Window Manager is requied.
 * Flexible Panels (for example "Taskbar")
 * Ultrafast application start menu
-* inspired by XFCE, developed for Linux
+* inspired by XFCE (from for Linux)
 
 ## How to install / build / run:
 * Download and Install GTK# 2.99/3.0: **[Download](https://github.com/mono/gtk-sharp/releases/download/2.99.3/gtk-sharp-2.99.3.msi)**. For Linux, install the gtk-sharp3 package with your packetmanager.
