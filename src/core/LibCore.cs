@@ -60,7 +60,7 @@ namespace abanu.core
 
 		private static FactoryActivator Load(string platform)
 		{
-			var asm = System.Reflection.Assembly.LoadFrom("abanu." + platform + ".dll");
+			var asm = System.Reflection.Assembly.LoadFrom("bin/abanu." + platform + ".dll");
 			var t = asm.GetType("abanu." + platform + ".FactoryActivator");
 			return (FactoryActivator)Activator.CreateInstance(t);
 		}

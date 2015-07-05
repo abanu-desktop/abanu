@@ -22,12 +22,14 @@ namespace abanu.panel
 			};*/
 
 			try {
+				Environment.CurrentDirectory = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(new Uri(typeof(MainClass).Assembly.CodeBase).LocalPath)).Parent.FullName;
+
 				var logwin = new LogWindow();
 				logwin.Show();
 				CoreLib.Log("log started");
 
 
-				AppConfig.Load("../config/config.xml");
+				AppConfig.Load("config/config.xml");
 
 				//Gtk.Settings.Default.ThemeName = "Dorian-3.16";
 				var shellMan = ShellManager.Create();

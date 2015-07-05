@@ -304,7 +304,7 @@ namespace abanu.win32
 		{
 
 			if (xdoc == null)
-				xdoc = XDocument.Load("../res/categories/default.xml");
+				xdoc = XDocument.Load("res/categories/default.xml");
 
 			foreach (var itm in  xdoc.Root.Elements("Item")) {
 				var filter = itm.Attribute("Filter").Value;
