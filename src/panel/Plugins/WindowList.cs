@@ -8,7 +8,8 @@ using abanu.core;
 namespace abanu.panel
 {
 
-	public class TasksPlugin : TPlugin
+	[PluginAttribute("windowlist")]
+	public class WindowListPlugin : TPlugin
 	{
 
 		private PanelButtonTable buttonTable;
@@ -21,8 +22,8 @@ namespace abanu.panel
 			return bt;
 		}
 
-		public TasksPlugin(TPanel panel)
-			: base(panel)
+		public WindowListPlugin(TPanel panel, PluginConfig cfg)
+			: base(panel, cfg)
 		{
 			buttonTable = new PanelButtonTable(Orientation.Horizontal);
 			//box.HeightRequest = panel.height;

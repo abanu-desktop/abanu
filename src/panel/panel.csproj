@@ -42,6 +42,8 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\..\lib\Lucene.Net.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -57,10 +59,10 @@
     <Compile Include="lib.cs" />
     <Compile Include="LogWindow.cs" />
     <Compile Include="LauncherMenu.cs" />
-    <Compile Include="Plugins\Menu.cs" />
     <Compile Include="Plugins\WindowList.cs" />
-    <Compile Include="Plugins\Date.cs" />
-    <Compile Include="Plugins\PlugLib.cs" />
+    <Compile Include="Plugins\Clock.cs" />
+    <Compile Include="Plugins\AppMenu.cs" />
+    <Compile Include="PlugLib.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -25,6 +25,10 @@ namespace abanu.panel
 				var logwin = new LogWindow();
 				logwin.Show();
 				CoreLib.Log("log started");
+
+
+				AppConfig.Load("../config/config.xml");
+
 				//Gtk.Settings.Default.ThemeName = "Dorian-3.16";
 				var shellMan = ShellManager.Create();
 				shellMan.UpdateWindows();
@@ -33,9 +37,11 @@ namespace abanu.panel
 				idx.AddLocations();
 				idx.Rebuild();
 
-				var pwin = new TPanel();
-				pwin.Setup();
-				pwin.Show();
+				foreach (var panConfig in AppConfig.Panels) {
+					var pwin = new TPanel(panConfig);
+					pwin.Setup();
+					pwin.Show();
+				}
 			} catch (Exception ex) {
 				CoreLib.MessageBox(ex.ToString());
 			}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<panels>
+		<panel orientation="horizontal" monitor="0" x="0" y="0" row-height="30" rows="3" size="100%" dock="top">
+			<plugins>
+				<plugin type="appmenu" />
+				<plugin type="windowlist" expand="true" />
+				<plugin type="clock" />
+			</plugins>
+		</panel>
+	</panels>
+</config>

@@ -9,18 +9,58 @@ using abanu.core;
 namespace abanu.panel
 {
 
+	public class PluginAttribute : Attribute
+	{
+		public string Name;
+
+		public PluginAttribute(string name)
+		{
+			this.Name = name;
+		}
+	}
+
 	public abstract class TPlugin
 	{
 
 		public TPanel panel;
 		public bool expand;
+		public PluginConfig cfg;
 
-		public TPlugin(TPanel panel)
+		public TPlugin(TPanel panel, PluginConfig cfg)
 		{
 			this.panel = panel;
+			this.cfg = cfg;
+			this.expand = cfg.Expand;
 		}
 
 		public abstract Widget CreateWidget();
+
+		public static Type GetPluginType(string name)
+		{
+			foreach (var t in typeof(AppLib).Assembly.GetTypes()) {
+				foreach (var attr in t.GetCustomAttributes(typeof(PluginAttribute), false)) {
+					if (((PluginAttribute)attr).Name == name)
+						return t;
+				}
+			}
+			return null;
+		}
+
+		public static IEnumerable<Type> GetPluginTypes()
+		{
+			foreach (var t in typeof(AppLib).Assembly.GetTypes()) {
+				foreach (var attr in t.GetCustomAttributes(typeof(PluginAttribute), false)) {
+					yield return t;
+					continue;
+				}
+			}
+		}
+
+		public static TPlugin CreateIntance(TPanel panel, PluginConfig cfg)
+		{
+			var t = GetPluginType(cfg.Type);
+			return (TPlugin)Activator.CreateInstance(t, new object[]{ panel, cfg });
+		}
 
 	}
 
@@ -206,7 +246,6 @@ namespace abanu.panel
 		{
 			if (rowBox.Parent == null)
 				return;
-
 
 			//var height = rowHeight * rowsCount;
 			var width = rowBox.AllocatedWidth;

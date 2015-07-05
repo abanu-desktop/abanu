@@ -8,13 +8,14 @@ using abanu.core;
 namespace abanu.panel
 {
 
+	[PluginAttribute("appmenu")]
 	public class MenuPlugin : TPlugin
 	{
 
 		private ToggleButton button;
 
-		public MenuPlugin(TPanel panel)
-			: base(panel)
+		public MenuPlugin(TPanel panel, PluginConfig cfg)
+			: base(panel, cfg)
 		{
 			button = new ToggleButton();
 			button.Add(new Label("Menu"));

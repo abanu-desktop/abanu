@@ -7,13 +7,15 @@ using abanu.core;
 
 namespace abanu.panel
 {
-	public class DatePlugin : TPlugin
+
+	[PluginAttribute("clock")]
+	public class ClockPlugin : TPlugin
 	{
 
 		private ToggleButton button;
 
-		public DatePlugin(TPanel panel)
-			: base(panel)
+		public ClockPlugin(TPanel panel, PluginConfig cfg)
+			: base(panel, cfg)
 		{
 			button = new ToggleButton();
 			button.Add(new Label("DateTime"));

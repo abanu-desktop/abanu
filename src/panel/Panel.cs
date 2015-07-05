@@ -27,22 +27,23 @@ namespace abanu.panel
 		private Box box;
 		private Menu menu;
 
-		public TPanel()
+		public PanelConfig cfg;
+
+		public TPanel(PanelConfig cfg)
 		{
+			this.cfg = cfg;
 			win = new PanelWindow();
 		}
 
 		public void Configure()
 		{
-			SetOrientation(Orientation.Horizontal);
-			SetPos(0, new Point(0, 0), 30, 3, 100.0, EDock.Top);
+			SetOrientation(cfg.Orientation);
+			SetPos(cfg.Monitor, new Point(cfg.X, cfg.Y), cfg.RowHeight, cfg.Rows, cfg.Size, cfg.Dock);
 
-			TPlugin plug = new MenuPlugin(this);
-			AddPlugin(plug);
-			plug = new TasksPlugin(this);
-			AddPlugin(plug, true);
-			plug = new DatePlugin(this);
-			AddPlugin(plug, false, true);
+			foreach (var plugCfg in cfg.Plugins) {
+				var p = TPlugin.CreateIntance(this, plugCfg);
+				AddPlugin(p);
+			}
 		}
 
 		public void SetOrientation(Orientation ori)
@@ -57,21 +58,26 @@ namespace abanu.panel
 		public int rows;
 
 
-		public void SetPos(int monitorIdx, Point pos, int rowHeight, int rows, double widthPercent, EDock dock)
+		public void SetPos(int monitorIdx, Point pos, int rowHeight, int rows, string size, EDock dock)
 		{
-			
+			var mon = Screen.Default.GetMonitorGeometry(monitorIdx);
+
+			if (size.EndsWith("%")) {
+				var widthPercent = double.Parse(size.Substring(0, size.Length - 1), System.Globalization.CultureInfo.InvariantCulture);
+				width = (int)(((double)mon.Width / 100) * widthPercent);
+			} else {
+				width = int.Parse(size);	
+			}
+
 			this.rows = rows;
 			this.rowHeight = rowHeight;
 			panelSize = rowHeight * rows;
 			height = panelSize;
-			var mon = Screen.Default.GetMonitorGeometry(monitorIdx);
 
 			if (dock.HasFlag(EDock.Top))
 				pos.Y = 0;
 			if (dock.HasFlag(EDock.Bottom))
 				pos.Y = mon.Height - panelSize;
-
-			width = (int)(((double)mon.Width / 100) * widthPercent);
 
 			win.Move(pos.X, pos.Y);
 			win.SetDefaultSize(width, height);
@@ -116,24 +122,12 @@ namespace abanu.panel
 			win.ShowAll();
 		}
 
-		public void AddPlugin(TPlugin plug, bool expand = false, bool last = false)
+		public void AddPlugin(TPlugin plug)
 		{
-			Widget w;
-			/*if (expand) {
-				var box2 = new Layout(new Adjustment(0, 0, 0, 0, 0, 0), new Adjustment(0, 0, 0, 0, 0, 0));
-
-				box2.Add(plug.CreateWidget());
-				w = box2;
-			} else {
-				w = plug.CreateWidget();
-			}*/
-			w = plug.CreateWidget();
+			var w = plug.CreateWidget();
 
 			plugins.Add(plug);
-			if (last)
-				box.PackEnd(w, expand, expand, 0);
-			else
-				box.PackStart(w, expand, expand, 0);
+			box.PackStart(w, plug.expand, plug.expand, 0);
 		}
 
 		public TPluginList plugins = new TPluginList();

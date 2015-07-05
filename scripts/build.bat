@@ -1,8 +1,8 @@
 cd %~dp0
 cd ..
 
-tools\fastcopy.exe /auto_close Z:\SharpShell /to="C:\Temp\SharpShell"
+tools\fastcopy.exe /auto_close Z:\abanu /to="C:\Temp\abanu"
 
-c:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe C:\Temp\SharpShell\src\SharpShell.sln
+c:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild.exe C:\Temp\abanu\src\abanu.sln
 
-cd C:\Temp\SharpShell\scripts
+cd C:\Temp\abanu\scripts

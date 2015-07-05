@@ -1,6 +1,6 @@
 cd %~dp0
 cd ..
 
-tools\fastcopy.exe /auto_close Z:\SharpShell /to="C:\Temp\SharpShell"
+tools\fastcopy.exe /auto_close Z:\abanu /to="C:\Temp\abanu"
 
-cd C:\Temp\SharpShell\scripts
+cd C:\Temp\abanu\scripts
