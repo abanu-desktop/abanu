@@ -19,7 +19,7 @@
 * Enter `abanu` directory and call `make.cmd` (Windows) call `make` (Linux)
 
 ## Current development state
-In the moment, only the Abanu Pan
+In the moment, only the Abanu Panel is working, but still in development.
 
 ## Your help is welcome!
 * We need documentation
