@@ -1,5 +1,6 @@
 ﻿using System;
 using Gtk;
+using System.Diagnostics;
 
 using abanu.core;
 
@@ -23,6 +24,17 @@ namespace abanu.panel
 
 			try {
 				Environment.CurrentDirectory = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(new Uri(typeof(MainClass).Assembly.CodeBase).LocalPath)).Parent.FullName;
+				if (args.Length > 0) {
+					if (args[0] == "--kill" || args[0] == "--replace") {
+						var currProcess = Process.GetCurrentProcess();
+						foreach (var process in System.Diagnostics.Process.GetProcessesByName("abanu.panel.exe"))
+							if (process.Id != currProcess.Id)
+								process.Kill();
+						
+						if (args[0] == "--kill")
+							return;
+					}
+				}
 
 				var logwin = new LogWindow();
 				logwin.Show();
