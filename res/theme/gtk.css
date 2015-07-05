@@ -1,0 +1,19 @@
+.toolbar {
+ padding: 0px;
+}
+
+@define-color button #ccc;
+@define-color button-hover #eee;
+@define-color border #999;
+
+.button {
+	background: @button;
+	border: 1px solid @border;
+	border-radius: 3px;
+}
+
+.button:hover {
+	background: @button-hover;
+	border: 1px solid @border;
+	border-radius: 3px;
+}

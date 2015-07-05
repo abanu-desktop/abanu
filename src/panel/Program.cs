@@ -40,8 +40,16 @@ namespace abanu.panel
 				logwin.Show();
 				CoreLib.Log("log started");
 
-
 				AppConfig.Load("config/config.xml");
+
+				if (Environment.OSVersion.Platform != PlatformID.Unix) {
+					AppLib.GlobalCssProvider = new CssProvider();
+					AppLib.GlobalCssProvider.LoadFromPath("res/theme/gtk.css");
+					StyleContext.AddProviderForScreen(Gdk.Screen.Default, AppLib.GlobalCssProvider, uint.MaxValue - 10);
+
+					var styleWin = new StyleWindow();
+					styleWin.Show();
+				}
 
 				//Gtk.Settings.Default.ThemeName = "Dorian-3.16";
 				var shellMan = ShellManager.Create();

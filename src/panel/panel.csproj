@@ -63,6 +63,7 @@
     <Compile Include="Plugins\Clock.cs" />
     <Compile Include="Plugins\AppMenu.cs" />
     <Compile Include="PlugLib.cs" />
+    <Compile Include="StyleEditor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

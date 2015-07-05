@@ -8,7 +8,7 @@ namespace abanu.panel
 {
 	public static class AppLib
 	{
-
+		public static CssProvider GlobalCssProvider;
 	}
 
 	public static class AppConfig
