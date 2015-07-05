@@ -29,16 +29,9 @@ namespace abanu.panel
 
 		public PanelButton()
 		{
-			/*box = new Alignment();
-			box.WidthRequest = 100;
-			box.Show();
-*/
-
-
-
-			button = new PanelButtonWidget();
+			button = new PanelButtonWidget(this);
 			button.Events = EventMask.AllEventsMask;
-			button.WidthRequest = 100;
+			//button.WidthRequest = 100;
 
 			box = new HBox();
 			button.Add(box);
@@ -51,6 +44,11 @@ namespace abanu.panel
 			button.Show();
 			label.Show();
 			box.Show();
+		}
+
+		internal virtual bool OnButtonPressEvent(EventButton evnt, Func<EventButton, bool> callBase)
+		{
+			return callBase(evnt);
 		}
 
 		#region IDisposable implementation
@@ -109,18 +107,32 @@ namespace abanu.panel
 		}
 
 		public PanelButtonWidget button;
-		public Label label;
+		private Label label;
 		private Image image;
 		private HBox box;
-		//public Alignment box;
+
 	}
 
 	public class PanelButtonWidget : ToggleButton
 	{
 
+		public PanelButton panelButton;
+
+		public PanelButtonWidget(PanelButton panelButton)
+		{
+			this.panelButton = panelButton;
+		}
+
+		protected override bool OnButtonPressEvent(EventButton evnt)
+		{
+			return panelButton.OnButtonPressEvent(evnt, (arg) => {
+				return base.OnButtonPressEvent(arg);
+			});
+		}
+
 	}
 
-	public class PanelButtonContainer : IEnumerable<PanelButton>
+	public class PanelButtonTable : IEnumerable<PanelButton>
 	{
 
 		public class PanelButtonList :  Box
@@ -140,24 +152,7 @@ namespace abanu.panel
 			return buttons.GetEnumerator();
 		}
 
-		//private CustomBox rowBox;
 		private Table rowBox;
-
-		public class CustomBox : Box
-		{
-			public CustomBox(Orientation ori)
-				: base(ori, 0)
-			{
-			}
-
-			/*			protected override void OnGetPreferredWidth(out int minimum_width, out int natural_width)
-			{
-				//base.OnGetPreferredWidth(out minimum_width, out natural_width);
-				minimum_width = 0;
-				natural_width = 0;
-			}*/
-
-		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
@@ -166,36 +161,30 @@ namespace abanu.panel
 
 		#endregion
 
-		public PanelButtonContainer(Orientation ori)
+		public PanelButtonTable(Orientation ori)
 		{
-			//rowBox = new CustomBox(ori == Orientation.Vertical ? Orientation.Horizontal : Orientation.Vertical);
-			rowBox = new Table(1, 18, false);
-			for (var i = 0; i < rowsCount; i++) {
-				/*var row = new PanelButtonList(ori);
-				rows.Add(row);
-				rowBox.Add(row);*/
-			}
+			rowBox = new Table(0, 0, false);
+			rowBox.Valign = Align.Start;
 
 			CoreLib.OnSignal += (path, args) => {
 				UpdateButtons();
 			};
 
+			Rectangle alloc = new Rectangle();
 			rowBox.SizeAllocated += (s, e) => {
-				//alloc = e.Allocation;
-				Application.Invoke((a, b) => {
-					//UpdateButtons();
-				});
-				//UpdateButtons();
+				if (alloc.Width != e.Allocation.Width) {
+					alloc = e.Allocation;
+
+					Application.Invoke((ss, ee) => {
+						UpdateButtons();
+					});
+
+				}
 			};
-
-
 		}
 
-		//private Rectangle alloc;
-
-		public int rowHeight = -1;
-		public int rowsCount = 1;
-		//private List<PanelButtonList> rows = new List<PanelButtonList>();
+		//public int rowHeight = 30;
+		public int rowsCount = 3;
 
 		public List<PanelButton> buttons = new List<PanelButton>();
 
@@ -211,11 +200,18 @@ namespace abanu.panel
 			UpdateButtons();
 		}
 
-		private int buttonWidthNormal = 100;
+		private uint buttonWidthNormal = 100;
 
 		private void UpdateButtons()
 		{
+			if (rowBox.Parent == null)
+				return;
+
+
+			//var height = rowHeight * rowsCount;
 			var width = rowBox.AllocatedWidth;
+
+			//rowBox.HeightRequest = 30;
 
 			foreach (PanelButton bt in buttons) {
 				if (bt.button.Parent != null)
@@ -223,35 +219,23 @@ namespace abanu.panel
 			}
 
 			var numNormal = width / buttonWidthNormal;
-			numNormal = 18;
+
+			rowBox.Resize((uint)numNormal, (uint)rowsCount);
 
 			uint currCount = 0;
+			uint currRow = 0;
 			foreach (var bt in buttons) {
-				if (currCount < numNormal) {
-					//bt.Show();
-					//bt.WidthRequest = buttonWidthNormal;
-					//bt.Expand = false;
-					//rows[0].Add(bt.button);
-					if (currCount < 18)
-						rowBox.Attach(bt.button, currCount + 0, currCount + 1, 0, 1);
-
-					currCount++;
+				if (currCount >= numNormal) {
+					currRow++;
+					currCount = 0;
 				}
+				rowBox.Attach(bt.button, currCount + 0, currCount + 1, currRow, currRow + 1);
+				currCount++;
 			}
 		}
 
-		public bool expand = true;
-
 		public Widget GetRoot()
 		{
-/*			if (expand) {
-				var box2 = new Layout(new Adjustment(0, 0, 0, 0, 0, 0), new Adjustment(0, 0, 0, 0, 0, 0));
-				box2.Add(rowBox);
-				return box2;
-			} else {
-				return rowBox;
-			}*/
-
 			return rowBox;
 		}
 

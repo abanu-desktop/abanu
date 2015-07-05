@@ -35,7 +35,7 @@ namespace abanu.panel
 		public void Configure()
 		{
 			SetOrientation(Orientation.Horizontal);
-			SetPos(0, new Point(0, 0), 30, 1, 100.0, EDock.Top);
+			SetPos(0, new Point(0, 0), 30, 3, 100.0, EDock.Top);
 
 			TPlugin plug = new MenuPlugin(this);
 			AddPlugin(plug);
@@ -75,6 +75,7 @@ namespace abanu.panel
 
 			win.Move(pos.X, pos.Y);
 			win.SetDefaultSize(width, height);
+			win.SetSizeRequest(width, height);
 		}
 
 		public int width;

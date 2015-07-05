@@ -11,7 +11,7 @@ namespace abanu.panel
 	public class TasksPlugin : TPlugin
 	{
 
-		private PanelButtonContainer buttonContainer;
+		private PanelButtonTable buttonTable;
 		private Dictionary<TWindow, TWindowButton> buthash2 = new Dictionary<TWindow, TWindowButton>();
 
 		public TWindowButton GetButton(TWindow wnd)
@@ -24,7 +24,7 @@ namespace abanu.panel
 		public TasksPlugin(TPanel panel)
 			: base(panel)
 		{
-			buttonContainer = new PanelButtonContainer(Orientation.Horizontal);
+			buttonTable = new PanelButtonTable(Orientation.Horizontal);
 			//box.HeightRequest = panel.height;
 			Update();
 
@@ -46,7 +46,7 @@ namespace abanu.panel
 				var bt = GetButton(wnd);
 				if (bt != null) {
 					buthash2.Remove(wnd);
-					buttonContainer.Remove(bt);
+					buttonTable.Remove(bt);
 					bt.Dispose();
 				}
 			};
@@ -55,19 +55,12 @@ namespace abanu.panel
 					createButton(wnd);
 			};
 
-			//box.SizeAllocated += (s, e) => 
-			//	OnSizeAllocated(e);
-		}
-
-		private void OnSizeAllocated(SizeAllocatedArgs args)
-		{
-
 		}
 
 		public void Update()
 		{
-			foreach (var child in buttonContainer) {
-				buttonContainer.Remove(child);
+			foreach (var child in buttonTable) {
+				buttonTable.Remove(child);
 				child.Dispose();
 			}
 
@@ -94,8 +87,9 @@ namespace abanu.panel
 			{
 				base.OnToggled();
 			}
+*/
 
-			protected override bool OnButtonPressEvent(EventButton evnt)
+			internal override bool OnButtonPressEvent(EventButton evnt, Func<EventButton, bool> callBase)
 			{
 				if (Active)
 					wnd.Minimize();
@@ -103,7 +97,7 @@ namespace abanu.panel
 					wnd.BringToFront();
 				return false;
 			}
-*/
+
 
 		}
 
@@ -111,12 +105,7 @@ namespace abanu.panel
 		{
 			CoreLib.Log(wnd.hwnd.ToString());
 
-			var b = new HBox();
-			b.Show();
-			b.Events = EventMask.AllEventsMask;
-
 			var but = new TWindowButton(wnd);
-			//but.Add(b);
 
 			var img = wnd.GetIcon(new Size(22, 22));
 			if (img != null) {
@@ -125,43 +114,7 @@ namespace abanu.panel
 			}
 
 			but.Label = wnd.GetName();
-			buttonContainer.Add(but);
-
-			/*
-			var lab = new Label("hhhhhhhhhhhhhhhhhhhhhhhhh");
-			lab.Ellipsize = Pango.EllipsizeMode.End;
-			lab.Halign = Align.Start;
-			//lab.WidthRequest = 100 - 22;
-			lab.Show();
-			but.Add(lab);
-			but.WidthRequest = 100;
-			but.Show();
-			buttonContainer.Add(but);
-*/
-
-			/*
-			but.Add(b);
-			buttonContainer.Add(but);
-
-			var img = wnd.GetIcon(new Size(22, 22));
-			if (img != null) {
-				img.Events = EventMask.AllEventsMask;
-				//but.Image = img;
-				b.Add(img);
-				b.Expand = false;
-			}
-
-			var lab = new Label();
-			lab.Ellipsize = Pango.EllipsizeMode.End;
-			lab.Text = wnd.GetName();
-			lab.Events = EventMask.AllEventsMask;
-
-			//lab.WidthRequest = 100;
-
-			b.Add(lab);
-*/
-
-			b.ShowAll();
+			buttonTable.Add(but);
 
 			buthash2.Add(wnd, but);
 
@@ -173,7 +126,7 @@ namespace abanu.panel
 
 		public override Widget CreateWidget()
 		{
-			return buttonContainer.GetRoot();
+			return buttonTable.GetRoot();
 		}
 
 	}

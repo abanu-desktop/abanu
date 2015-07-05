@@ -37,12 +37,14 @@ namespace abanu.unix
 			if (e.type == X11.XEventName.PropertyNotify) {
 				var actWin = Screen.Default.ActiveWindow;
 
-				if (lastActive == null || actWin.Handle != lastActive.Handle) {
-					lastActive = actWin;
-					var win = Windows.GetOrCreate(actWin.Handle);
-					RaiseWindowActivated(win);
+				if (actWin != null) {
+					if (lastActive == null || actWin.Handle != lastActive.Handle) {
+						lastActive = actWin;
+						var win = Windows.GetOrCreate(actWin.Handle);
+						RaiseWindowActivated(win);
+					}
 				}
-
+					 
 			}
 
 			// Everything else just process as normal
