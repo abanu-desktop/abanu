@@ -13,6 +13,11 @@
 * Ultrafast application start menu
 * inspired by XFCE, developed for Linux
 
+## How to install / build:
+* Download and Install GTK# 2.99/3.0: **[Download](https://github.com/mono/gtk-sharp/releases/download/2.99.3/gtk-sharp-2.99.3.msi)**. For Linux, install the gtk-sharp3 package with your packetmanager.
+* Download and extract Source (Zip-Archive): **[Download](https://github.com/abanu-desktop/abanu/archive/master.zip)**
+* Enter `abanu` directory and call `make.cmd` (Windows) call `make` (Linux)
+
 ## Current development state
 In the moment, only the Abanu Pan
 
