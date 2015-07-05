@@ -306,18 +306,17 @@ namespace abanu.win32
 			if (xdoc == null)
 				xdoc = XDocument.Load("res/categories/default.xml");
 
-			foreach (var itm in  xdoc.Root.Elements("Item")) {
-				var filter = itm.Attribute("Filter").Value;
-				var cat = itm.Attribute("Category").Value;
+			foreach (var itm in  xdoc.Root.Elements("item")) {
+				var filter = itm.Attribute("filter").Value;
+				var cat = itm.Attribute("category").Value;
 				if (entry.Command.ToLower().Contains(filter)) {
 					entry.Categories = cat;
 					entry.UpdateMainCategory();
 					return;
 				}
-				entry.Categories = "None";
-				entry.MainCategory = "None";
 			}
-
+			entry.Categories = "None";
+			entry.MainCategory = "None";
 		}
 
 	}

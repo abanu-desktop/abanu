@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Root>
-	<Item Filter="game" Category="Game" />
-	<Item Filter="battle.net" Category="Game" />
-	<Item Filter="calc" Category="Utility" />
-	<Item Filter="media" Category="AudioVideo" />
-	<Item Filter="7-zip" Category="Utility" />
-	<Item Filter="paint" Category="Graphics" />
-	<Item Filter="burn" Category="AudioVideo" />
-	<Item Filter="mstsc" Category="Network" />
-	<Item Filter="services.msc" Category="System" />
-</Root>
+<xml>
+	<item  filter="game" category="Game" />
+	<item  filter="battle.net" category="Game" />
+	<item  filter="calc" category="Utility" />
+	<item  filter="media" category="AudioVideo" />
+	<item  filter="7-zip" category="Utility" />
+	<item  filter="paint" category="Graphics" />
+	<item  filter="burn" category="AudioVideo" />
+	<item  filter="mstsc" category="Network" />
+	<item  filter="services.msc" category="System" />
+</xml>

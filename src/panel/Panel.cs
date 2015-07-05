@@ -12,7 +12,7 @@ namespace abanu.panel
 		public PanelWindow()
 			: base(Gtk.WindowType.Toplevel)
 		{
-			//Decorated = false;
+			KeepAbove = true;
 			//this.Resizable = false;
 			//this.SetDefaultSize(300, 300);
 			//this.SetGeometryHints(this, new Geometry(){ MaxWidth = 300 }, WindowHints.MaxSize);
